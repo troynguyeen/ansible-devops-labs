@@ -1,0 +1,34 @@
+- name: Download jenkins repo
+  get_url:
+    url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+    dest: /etc/yum.repos.d/jenkins.repo
+
+- name: Import jenkins key
+  rpm_key: 
+    key: https://pkg.jenkins.io/redhat/jenkins.io-2023.key
+    state: present
+
+- name: Upgrade yum
+  yum:
+    name: '*'
+    state: latest
+
+- name: Install java for jenkins dependencies
+  yum:
+    name: java-17-openjdk
+    state: latest
+
+- name: Install jenkins
+  yum:
+    name: jenkins
+    state: latest
+
+- name: Enable and start jenkins
+  systemd:
+    name: jenkins
+    state: started
+    enabled: true
+  register: jenkins_service_status
+
+- debug:
+    var: jenkins_service_status.status.ActiveState

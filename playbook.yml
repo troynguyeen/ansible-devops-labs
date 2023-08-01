@@ -1,0 +1,40 @@
+- name: Jenkins playbook
+  hosts: jenkins_install_group
+  become: yes
+  roles:
+    - install_jenkins
+
+- name: Docker playbook
+  hosts: docker_install_group
+  become: yes
+  roles:
+    - install_docker
+
+- name: GitLab playbook
+  hosts: gitlab_install_group
+  become: yes
+  roles:
+    - install_gitlab
+
+- name: Nexus playbook
+  hosts: nexus_install_group
+  vars_files:
+    - roles/install_nexus/vars/sensitive.yml
+  become: yes
+  roles:
+    - install_nexus
+  handlers:
+    - import_tasks: roles/install_nexus/handlers/handlers_service.yml
+
+- name: SonarQube playbook
+  hosts: sonarqube_install_group
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  vars_files:
+    - roles/install_sonarqube/vars/sensitive.yml
+  become: yes
+  roles:
+    - install_sonarqube
+  handlers:
+    - import_tasks: roles/install_sonarqube/handlers/handlers_service.yml
+

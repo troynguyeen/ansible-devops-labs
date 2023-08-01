@@ -1,0 +1,8 @@
+_username: sonarqube
+postgresql_gpg_key: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+sonarqube_file_name: sonarqube-9.8.0.63668.zip
+sonarqube_url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.8.0.63668.zip
+
+#CentOS
+centos_postgresql_url: https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+

@@ -1,0 +1,57 @@
+- name: Update yum
+  yum:
+    name: '*'
+    state: latest
+
+- name: Install package dependencies 
+  yum:
+    name:
+      - curl
+      - openssh-server
+      - perl
+    state: present
+
+- name: Enable and start sshd service
+  systemd:
+    name: sshd
+    state: started
+    enabled: yes
+
+- name: Add service http to firewalld
+  firewalld:
+    service: http
+    permanent: true
+    state: enabled
+
+- name: Add service https to firewalld
+  firewalld:
+    service: https
+    permanent: true
+    state: enabled
+
+- name: Reload firewalld service
+  systemd:
+    name: firewalld
+    state: reloaded
+
+- name: Install postfix
+  yum: 
+    name: postfix
+    state: present
+
+- name: Enable and start postfix service
+  systemd:
+    name: postfix
+    state: started
+    enabled: yes
+
+- name: Add GitLab repository and install the package
+  shell: curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash
+
+- name: Install GitLab CE
+  yum: 
+    name: gitlab-ce
+    state: present
+
+- name: Reconfigure gitlab-ctl
+  command: gitlab-ctl reconfigure

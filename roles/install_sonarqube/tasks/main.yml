@@ -1,0 +1,7 @@
+- name: Main task install SonarQube on RedHat
+  include_tasks: distro/centos.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: Main task install SonarQube on Debian
+  include_tasks: distro/ubuntu.yml
+  when: ansible_os_family == 'Debian'

@@ -1,0 +1,4 @@
+- name: Reload Nexus systemd service
+  systemd:
+    name: nexus
+    state: restarted

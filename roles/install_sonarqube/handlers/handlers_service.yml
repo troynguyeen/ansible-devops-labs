@@ -1,0 +1,9 @@
+- name: Restart PostgreSQL
+  systemd:
+    name: postgresql
+    state: restarted
+
+- name: Reload SonarQube systemd service
+  systemd:
+    name: sonarqube
+    state: restarted

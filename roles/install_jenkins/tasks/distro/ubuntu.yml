@@ -1,0 +1,41 @@
+- name: Download and save jenkins repo key
+  get_url:
+    url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+    dest: /usr/share/keyrings/jenkins-keyring.asc
+
+- name: Create jenkins-keyring.asc file
+  file:
+    path: /usr/share/keyrings/jenkins-keyring.asc
+    state: touch
+    mode: '0644'
+
+- name: Add deb line to jenkins.list
+  lineinfile:
+    path: /etc/apt/sources.list.d/jenkins.list
+    line: 'deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/'
+    state: present
+    create: yes
+
+- name: Upgrade apt
+  apt:
+    update_cache: yes
+
+- name: Install java
+  apt:
+    name: openjdk-17-jre
+    state: latest
+
+- name: Install jenkins
+  apt:
+    name: jenkins
+    state: latest
+
+- name: Enable and start jenkins
+  systemd:
+    name: jenkins
+    state: started
+    enabled: true
+  register: jenkins_service_status
+
+- debug:
+    var: jenkins_service_status.status.ActiveState

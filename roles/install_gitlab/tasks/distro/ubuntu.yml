@@ -1,0 +1,36 @@
+- name: Update apt
+  apt:
+    name: '*'
+    state: latest
+
+- name: Install package dependencies 
+  apt:
+    name:
+      - curl
+      - ca-certificates
+      - openssh-server
+      - tzdata
+      - perl
+    state: present
+
+- name: Install postfix
+  apt: 
+    name: postfix
+    state: present
+
+- name: Enable and start postfix service
+  systemd:
+    name: postfix
+    state: started
+    enabled: yes
+
+- name: Add GitLab repository and install the package
+  shell: curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
+
+- name: Install GitLab CE
+  apt: 
+    name: gitlab-ce
+    state: present
+
+- name: Reconfigure gitlab-ctl
+  command: gitlab-ctl reconfigure

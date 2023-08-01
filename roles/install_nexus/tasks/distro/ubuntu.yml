@@ -1,0 +1,120 @@
+- name: Update apt
+  apt:
+    name: '*'
+    state: latest
+
+- name: Install Java
+  apt:
+    name: openjdk-8-jre-headless
+    state: present
+
+- name: Set default JDK to OpenJDK 8
+  community.general.alternatives:
+    name: java
+    path: /usr/lib/jvm/java-8-openjdk-arm64/bin/java
+    link: /usr/bin/java
+
+- name: Create folder before download
+  file:
+    path: /opt/nexus_dir
+    state: directory
+
+- name: Check nexus download file was existed
+  stat:
+    path: '/opt/nexus_dir/nexus.tar.gz'
+  register: nexus_download
+
+- name: Download nexus file
+  get_url:
+    url: '{{nexus_url}}'
+    dest: /opt/nexus_dir/nexus.tar.gz
+  when: nexus_download.stat.exists == false
+
+- name: Check the nexus file was extracted and renamed
+  stat:
+    path: '/opt/nexus_dir/nexus'
+  register: nexus_file
+
+- name: Extract the nexus file
+  unarchive:
+    src: /opt/nexus_dir/nexus.tar.gz
+    dest: /opt/nexus_dir
+    remote_src: true
+    mode: '0755'
+  when: nexus_file.stat.exists == false
+
+- name: Find the directories name after extract
+  find:
+    path: /opt/nexus_dir
+    pattern: 'nexus*'
+    file_type: directory
+  register: list_directories_name
+  when: nexus_file.stat.exists == false
+
+- name: Get the list of directory names
+  set_fact:
+    directory_name: "{{ list_directories_name.files | map(attribute='path') | map('basename') | list | first }}"
+  when: nexus_file.stat.exists == false
+
+- name: Rename nexus file
+  command: mv /opt/nexus_dir/{{directory_name}} /opt/nexus_dir/nexus
+  when: nexus_file.stat.exists == false
+
+- name: Add user nexus
+  user:
+    name: '{{ _username }}'
+    password: '{{ nexus_user_password }}'
+
+- name: Add line no password to sudoers file
+  lineinfile:
+    path: /etc/sudoers
+    line: 'nexus ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+    state: present
+    create: yes
+
+- name: Change ownership of nexus directory
+  file:
+    path: /opt/nexus_dir/nexus
+    owner: nexus
+    group: nexus
+    state: directory
+    recurse: yes
+
+- name: Change ownership of sonatype-work directory
+  file:
+    path: /opt/nexus_dir/sonatype-work
+    owner: nexus
+    group: nexus
+    state: directory
+    recurse: yes
+
+- name: Uncomment and set run_as_user parameter
+  lineinfile:
+    path: /opt/nexus_dir/nexus/bin/nexus.rc
+    regexp: '^#run_as_user='
+    line: 'run_as_user="nexus"'
+
+- name: Copy Nexus systemd unit file
+  template:
+    src: roles/install_nexus/templates/nexus.service.j2
+    dest: /etc/systemd/system/nexus.service
+  notify:
+    - Reload Nexus systemd service
+
+- name: Run systemctl daemon-reload to save any changes or configurations
+  command: systemctl daemon-reload
+
+- name: Enable Nexus service at boot
+  systemd:
+    name: nexus
+    enabled: yes
+
+- name: Start Nexus service
+  systemd:
+    name: nexus
+    state: started
+  register: nexus_service_status
+
+- debug:
+    var: nexus_service_status.status.ActiveState

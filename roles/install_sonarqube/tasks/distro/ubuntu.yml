@@ -1,0 +1,182 @@
+- name: Update apt
+  apt:
+    name: '*'
+    state: latest
+
+- name: Install OpenJDK 11
+  apt:
+    name: openjdk-11-jdk
+    state: present
+
+- name: Set default JDK to OpenJDK 11
+  community.general.alternatives:
+    name: java
+    path: /usr/lib/jvm/java-11-openjdk-arm64/bin/java
+    link: /usr/bin/java
+
+- name: Add GPG key for PostgreSQL
+  apt_key:
+    url: '{{ postgresql_gpg_key }}'
+    state: present
+
+- name: Add PostgreSQL repository to sources.list.d
+  lineinfile:
+    path: /etc/apt/sources.list.d/postgresql.list
+    line: 'deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_lsb.codename }}-pgdg main'
+    create: yes
+    state: present
+
+- name: Update APT cache
+  apt:
+    update_cache: yes
+
+- name: Install PostgreSQL 14
+  apt:
+    name: postgresql-14
+    state: present
+
+- name: Start PostgreSQL Database server
+  systemd:
+    name: postgresql
+    state: started
+    enabled: yes
+
+- name: Install psycopg2
+  apt:
+    name: python3-psycopg2
+    state: present
+
+- name: Add user postgres
+  user:
+    name: 'postgres'
+    password: 'postgres'
+
+- name: Create sonarqube_db database
+  community.postgresql.postgresql_db:
+    name: sonarqube_db
+    encoding: UTF8
+  become: yes
+  become_user: postgres
+
+- name: Create sonarqube DB user with encrypted password
+  community.postgresql.postgresql_user:
+    name: sonarqube
+    password: '{{ sonarqube_password_db }}'
+    encrypted: yes
+  become: yes
+  become_user: postgres
+
+- name: Grant all privileges to sonarqube user on sonarqube_db
+  community.postgresql.postgresql_privs:
+    database: sonarqube_db
+    privs: ALL
+    type: database
+    roles: sonarqube
+  become: yes
+  become_user: postgres
+
+- name: Create folder before download
+  file:
+    path: /opt/sonarqube_dir
+    state: directory
+
+- name: Check SonarQube download file was existed
+  stat:
+    path: '/opt/sonarqube_dir/{{ sonarqube_file_name }}'
+  register: sonarqube_download
+
+- name: Download SonarQube
+  get_url:
+    url: '{{ sonarqube_url }}'
+    dest: /opt/sonarqube_dir
+  when: sonarqube_download.stat.exists == false
+
+- name: Check the SonarQube file was extracted and renamed
+  stat:
+    path: /opt/sonarqube_dir/sonarqube
+  register: sonarqube_file
+
+- name: Install unzip package denpendency
+  package:
+    name: unzip
+    state: present
+
+- name: Extract the SonarQube file
+  unarchive:
+    src: '/opt/sonarqube_dir/{{ sonarqube_file_name }}'
+    dest: /opt/sonarqube_dir
+    remote_src: yes
+    mode: '0755'
+  when: sonarqube_file.stat.exists == false
+
+- name: Find the directories name after extract
+  find:
+    path: /opt/sonarqube_dir
+    pattern: 'sonarqube*'
+    file_type: directory
+  register: list_directories_name
+  when: sonarqube_file.stat.exists == false
+
+- name: Get the list of directory names
+  set_fact:
+    directory_name: "{{ list_directories_name.files | map(attribute='path') | map('basename') | list | first }}"
+  when: sonarqube_file.stat.exists == false
+
+- name: Rename SonarQube file
+  command: mv /opt/sonarqube_dir/{{ directory_name }} /opt/sonarqube_dir/sonarqube
+  when: sonarqube_file.stat.exists == false
+
+- name: Uncomment and edit username parameter
+  lineinfile:
+    path: /opt/sonarqube_dir/sonarqube/conf/sonar.properties
+    regexp: '^#sonar.jdbc.username='
+    line: sonar.jdbc.username=sonarqube
+
+- name: Uncomment and edit password parameter
+  lineinfile:
+    path: /opt/sonarqube_dir/sonarqube/conf/sonar.properties
+    regexp: '^#sonar.jdbc.password='
+    line: 'sonar.jdbc.password={{ sonarqube_password_db }}'
+
+- name: Add user sonar
+  user:
+    name: '{{ _username }}'
+    password: '{{ sonar_user_password }}'
+
+- name: Change ownership of SonarQube directory
+  file:
+    path: /opt/sonarqube_dir/sonarqube
+    owner: sonarqube
+    group: sonarqube
+    state: directory
+    recurse: yes
+
+- name: Create sonarqube.service file
+  file:
+    path: /etc/systemd/system/sonarqube.service
+    state: touch
+    mode: 0755
+
+- name: Copy SonarQube systemd unit file
+  template:
+    src: roles/install_sonarqube/templates/sonarqube.service.j2
+    dest: /etc/systemd/system/sonarqube.service
+  notify:
+    - Reload SonarQube systemd service
+
+- name: Run systemctl daemon-reload to save any changes or configurations
+  command: systemctl daemon-reload
+
+- name: Enable SonarQube service at boot
+  systemd:
+    name: sonarqube
+    enabled: yes
+
+- name: Start SonarQube service
+  systemd:
+    name: sonarqube
+    state: started
+  register: sonarqube_service
+
+- debug:
+    var: sonarqube_service.status.ActiveState

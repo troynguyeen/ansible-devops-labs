@@ -1,0 +1,47 @@
+2023-07-27 18:03:25,084 p=11435 u=ansible n=ansible | PLAY [Jenkins playbook] *****************************************************************************************************************************
+2023-07-27 18:03:25,106 p=11435 u=ansible n=ansible | TASK [Gathering Facts] ******************************************************************************************************************************
+2023-07-27 18:03:26,101 p=11435 u=ansible n=ansible | ok: [ubuntu1]
+2023-07-27 18:03:26,355 p=11435 u=ansible n=ansible | ok: [centos1]
+2023-07-27 18:03:26,369 p=11435 u=ansible n=ansible | TASK [install_jenkins : Main task install Jenkins on RedHat] ****************************************************************************************
+2023-07-27 18:03:26,385 p=11435 u=ansible n=ansible | skipping: [ubuntu1]
+2023-07-27 18:03:26,393 p=11435 u=ansible n=ansible | included: /home/ansible/labs/jenkins/roles/install_jenkins/tasks/distro/centos.yml for centos1
+2023-07-27 18:03:26,397 p=11435 u=ansible n=ansible | TASK [install_jenkins : Download jenkins repo] ******************************************************************************************************
+2023-07-27 18:03:27,169 p=11435 u=ansible n=ansible | ok: [centos1]
+2023-07-27 18:03:27,172 p=11435 u=ansible n=ansible | TASK [install_jenkins : Import jenkins key] *********************************************************************************************************
+2023-07-27 18:03:27,835 p=11435 u=ansible n=ansible | ok: [centos1]
+2023-07-27 18:03:27,838 p=11435 u=ansible n=ansible | TASK [install_jenkins : Upgrade yum] ****************************************************************************************************************
+2023-07-27 18:03:28,708 p=11435 u=ansible n=ansible | ok: [centos1]
+2023-07-27 18:03:28,714 p=11435 u=ansible n=ansible | TASK [install_jenkins : Install java for jenkins dependencies] **************************************************************************************
+2023-07-27 18:03:29,447 p=11435 u=ansible n=ansible | ok: [centos1]
+2023-07-27 18:03:29,449 p=11435 u=ansible n=ansible | TASK [install_jenkins : Install jenkins] ************************************************************************************************************
+2023-07-27 18:03:30,278 p=11435 u=ansible n=ansible | ok: [centos1]
+2023-07-27 18:03:30,281 p=11435 u=ansible n=ansible | TASK [install_jenkins : Enable and start jenkins] ***************************************************************************************************
+2023-07-27 18:03:30,818 p=11435 u=ansible n=ansible | ok: [centos1]
+2023-07-27 18:03:30,822 p=11435 u=ansible n=ansible | TASK [install_jenkins : debug] **********************************************************************************************************************
+2023-07-27 18:03:30,836 p=11435 u=ansible n=ansible | ok: [centos1] => {
+    "jenkins_service_status.status.ActiveState": "active"
+}
+2023-07-27 18:03:30,840 p=11435 u=ansible n=ansible | TASK [install_jenkins : Main task install Jenkins on Debian] ****************************************************************************************
+2023-07-27 18:03:30,851 p=11435 u=ansible n=ansible | skipping: [centos1]
+2023-07-27 18:03:30,862 p=11435 u=ansible n=ansible | included: /home/ansible/labs/jenkins/roles/install_jenkins/tasks/distro/ubuntu.yml for ubuntu1
+2023-07-27 18:03:30,869 p=11435 u=ansible n=ansible | TASK [install_jenkins : Download and save jenkins repo key] *****************************************************************************************
+2023-07-27 18:03:31,277 p=11435 u=ansible n=ansible | ok: [ubuntu1]
+2023-07-27 18:03:31,283 p=11435 u=ansible n=ansible | TASK [install_jenkins : Create jenkins-keyring.asc file] ********************************************************************************************
+2023-07-27 18:03:31,542 p=11435 u=ansible n=ansible | changed: [ubuntu1]
+2023-07-27 18:03:31,547 p=11435 u=ansible n=ansible | TASK [install_jenkins : Add deb line to jenkins.list] ***********************************************************************************************
+2023-07-27 18:03:31,801 p=11435 u=ansible n=ansible | ok: [ubuntu1]
+2023-07-27 18:03:31,808 p=11435 u=ansible n=ansible | TASK [install_jenkins : Upgrade apt] ****************************************************************************************************************
+2023-07-27 18:03:34,179 p=11435 u=ansible n=ansible | changed: [ubuntu1]
+2023-07-27 18:03:34,188 p=11435 u=ansible n=ansible | TASK [install_jenkins : Install java] ***************************************************************************************************************
+2023-07-27 18:03:34,866 p=11435 u=ansible n=ansible | ok: [ubuntu1]
+2023-07-27 18:03:34,873 p=11435 u=ansible n=ansible | TASK [install_jenkins : Install jenkins] ************************************************************************************************************
+2023-07-27 18:03:35,659 p=11435 u=ansible n=ansible | ok: [ubuntu1]
+2023-07-27 18:03:35,672 p=11435 u=ansible n=ansible | TASK [install_jenkins : Enable and start jenkins] ***************************************************************************************************
+2023-07-27 18:03:36,054 p=11435 u=ansible n=ansible | ok: [ubuntu1]
+2023-07-27 18:03:36,064 p=11435 u=ansible n=ansible | TASK [install_jenkins : debug] **********************************************************************************************************************
+2023-07-27 18:03:36,084 p=11435 u=ansible n=ansible | ok: [ubuntu1] => {
+    "jenkins_service_status.status.ActiveState": "active"
+}
+2023-07-27 18:03:36,144 p=11435 u=ansible n=ansible | PLAY RECAP ******************************************************************************************************************************************
+2023-07-27 18:03:36,144 p=11435 u=ansible n=ansible | centos1                    : ok=9    changed=0    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+2023-07-27 18:03:36,144 p=11435 u=ansible n=ansible | ubuntu1                    : ok=10   changed=2    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   

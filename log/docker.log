@@ -1,0 +1,63 @@
+2023-07-28 14:32:08,216 p=4451 u=ansible n=ansible | PLAY [Docker playbook] ******************************************************************************************************************************
+2023-07-28 14:32:08,237 p=4451 u=ansible n=ansible | TASK [Gathering Facts] ******************************************************************************************************************************
+2023-07-28 14:32:09,481 p=4451 u=ansible n=ansible | ok: [ubuntu1]
+2023-07-28 14:32:09,626 p=4451 u=ansible n=ansible | ok: [centos1]
+2023-07-28 14:32:09,646 p=4451 u=ansible n=ansible | ok: [centos2]
+2023-07-28 14:32:09,662 p=4451 u=ansible n=ansible | TASK [install_docker : Main task install Docker on RedHat] ******************************************************************************************
+2023-07-28 14:32:09,682 p=4451 u=ansible n=ansible | skipping: [ubuntu1]
+2023-07-28 14:32:09,689 p=4451 u=ansible n=ansible | included: /home/ansible/labs/roles/install_docker/tasks/distro/centos.yml for centos1, centos2
+2023-07-28 14:32:09,692 p=4451 u=ansible n=ansible | TASK [install_docker : Install yum-utils] ***********************************************************************************************************
+2023-07-28 14:32:10,376 p=4451 u=ansible n=ansible | ok: [centos2]
+2023-07-28 14:32:10,471 p=4451 u=ansible n=ansible | ok: [centos1]
+2023-07-28 14:32:10,474 p=4451 u=ansible n=ansible | TASK [install_docker : Download Docker CE repository configuration file] ****************************************************************************
+2023-07-28 14:32:11,162 p=4451 u=ansible n=ansible | ok: [centos2]
+2023-07-28 14:32:11,163 p=4451 u=ansible n=ansible | ok: [centos1]
+2023-07-28 14:32:11,165 p=4451 u=ansible n=ansible | TASK [install_docker : Install docker] **************************************************************************************************************
+2023-07-28 14:32:14,653 p=4451 u=ansible n=ansible | changed: [centos1]
+2023-07-28 14:33:20,906 p=4451 u=ansible n=ansible | changed: [centos2]
+2023-07-28 14:33:20,911 p=4451 u=ansible n=ansible | TASK [install_docker : Enable and start docker] *****************************************************************************************************
+2023-07-28 14:33:22,868 p=4451 u=ansible n=ansible | changed: [centos2]
+2023-07-28 14:33:22,971 p=4451 u=ansible n=ansible | changed: [centos1]
+2023-07-28 14:33:22,974 p=4451 u=ansible n=ansible | TASK [install_docker : debug] ***********************************************************************************************************************
+2023-07-28 14:33:22,987 p=4451 u=ansible n=ansible | ok: [centos1] => {
+    "docker_service_status.status.ActiveState": "inactive"
+}
+2023-07-28 14:33:22,990 p=4451 u=ansible n=ansible | ok: [centos2] => {
+    "docker_service_status.status.ActiveState": "inactive"
+}
+2023-07-28 14:33:22,992 p=4451 u=ansible n=ansible | TASK [install_docker : Main task install Docker on Debian] ******************************************************************************************
+2023-07-28 14:33:23,006 p=4451 u=ansible n=ansible | skipping: [centos1]
+2023-07-28 14:33:23,007 p=4451 u=ansible n=ansible | skipping: [centos2]
+2023-07-28 14:33:23,020 p=4451 u=ansible n=ansible | included: /home/ansible/labs/roles/install_docker/tasks/distro/ubuntu.yml for ubuntu1
+2023-07-28 14:33:23,028 p=4451 u=ansible n=ansible | TASK [install_docker : Update apt first] ************************************************************************************************************
+2023-07-28 14:33:25,664 p=4451 u=ansible n=ansible | changed: [ubuntu1]
+2023-07-28 14:33:25,671 p=4451 u=ansible n=ansible | TASK [install_docker : Install packages to allow apt to use a repository over HTTPS] ****************************************************************
+2023-07-28 14:33:26,242 p=4451 u=ansible n=ansible | ok: [ubuntu1]
+2023-07-28 14:33:26,249 p=4451 u=ansible n=ansible | TASK [install_docker : Create folder to store Docker’s official GPG key] ****************************************************************************
+2023-07-28 14:33:26,491 p=4451 u=ansible n=ansible | ok: [ubuntu1]
+2023-07-28 14:33:26,498 p=4451 u=ansible n=ansible | TASK [install_docker : Check the GPG key is existed] ************************************************************************************************
+2023-07-28 14:33:26,726 p=4451 u=ansible n=ansible | ok: [ubuntu1]
+2023-07-28 14:33:26,734 p=4451 u=ansible n=ansible | TASK [install_docker : Download Docker's official GPG key] ******************************************************************************************
+2023-07-28 14:33:26,742 p=4451 u=ansible n=ansible | skipping: [ubuntu1]
+2023-07-28 14:33:26,750 p=4451 u=ansible n=ansible | TASK [install_docker : Set permission to read for all user] *****************************************************************************************
+2023-07-28 14:33:26,913 p=4451 u=ansible n=ansible | ok: [ubuntu1]
+2023-07-28 14:33:26,921 p=4451 u=ansible n=ansible | TASK [install_docker : Get architecture information] ************************************************************************************************
+2023-07-28 14:33:27,142 p=4451 u=ansible n=ansible | changed: [ubuntu1]
+2023-07-28 14:33:27,149 p=4451 u=ansible n=ansible | TASK [install_docker : Get Ubuntu codename] *********************************************************************************************************
+2023-07-28 14:33:27,308 p=4451 u=ansible n=ansible | changed: [ubuntu1]
+2023-07-28 14:33:27,315 p=4451 u=ansible n=ansible | TASK [install_docker : Add Docker repository to sources.list.d] *************************************************************************************
+2023-07-28 14:33:27,523 p=4451 u=ansible n=ansible | ok: [ubuntu1]
+2023-07-28 14:33:27,530 p=4451 u=ansible n=ansible | TASK [install_docker : Update apt] ******************************************************************************************************************
+2023-07-28 14:33:29,272 p=4451 u=ansible n=ansible | changed: [ubuntu1]
+2023-07-28 14:33:29,281 p=4451 u=ansible n=ansible | TASK [install_docker : Install docker] **************************************************************************************************************
+2023-07-28 14:33:29,864 p=4451 u=ansible n=ansible | ok: [ubuntu1]
+2023-07-28 14:33:29,872 p=4451 u=ansible n=ansible | TASK [install_docker : Enable and start docker] *****************************************************************************************************
+2023-07-28 14:33:30,123 p=4451 u=ansible n=ansible | ok: [ubuntu1]
+2023-07-28 14:33:30,131 p=4451 u=ansible n=ansible | TASK [install_docker : debug] ***********************************************************************************************************************
+2023-07-28 14:33:30,140 p=4451 u=ansible n=ansible | ok: [ubuntu1] => {
+    "docker_service_status.status.ActiveState": "active"
+}
+2023-07-28 14:33:30,174 p=4451 u=ansible n=ansible | PLAY RECAP ******************************************************************************************************************************************
+2023-07-28 14:33:30,174 p=4451 u=ansible n=ansible | centos1                    : ok=7    changed=2    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+2023-07-28 14:33:30,174 p=4451 u=ansible n=ansible | centos2                    : ok=7    changed=2    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+2023-07-28 14:33:30,174 p=4451 u=ansible n=ansible | ubuntu1                    : ok=14   changed=4    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   

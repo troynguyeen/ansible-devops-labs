@@ -1,0 +1,99 @@
+2023-07-29 17:48:43,400 p=2787 u=ansible n=ansible | PLAY [Nexus playbook] ******************************************************************************************************************************
+2023-07-29 17:48:43,404 p=2787 u=ansible n=ansible | TASK [Gathering Facts] *****************************************************************************************************************************
+2023-07-29 17:48:44,739 p=2787 u=ansible n=ansible | ok: [ubuntu2]
+2023-07-29 17:48:44,852 p=2787 u=ansible n=ansible | ok: [centos2]
+2023-07-29 17:48:44,864 p=2787 u=ansible n=ansible | TASK [install_nexus : Main task install Jenkins on RedHat] *****************************************************************************************
+2023-07-29 17:48:44,877 p=2787 u=ansible n=ansible | skipping: [ubuntu2]
+2023-07-29 17:48:44,883 p=2787 u=ansible n=ansible | included: /home/ansible/labs/roles/install_nexus/tasks/distro/centos.yml for centos2
+2023-07-29 17:48:44,887 p=2787 u=ansible n=ansible | TASK [install_nexus : Update yum] ******************************************************************************************************************
+2023-07-29 17:48:46,078 p=2787 u=ansible n=ansible | ok: [centos2]
+2023-07-29 17:48:46,081 p=2787 u=ansible n=ansible | TASK [install_nexus : Install Java] ****************************************************************************************************************
+2023-07-29 17:48:46,656 p=2787 u=ansible n=ansible | ok: [centos2]
+2023-07-29 17:48:46,658 p=2787 u=ansible n=ansible | TASK [install_nexus : Create folder before download] ***********************************************************************************************
+2023-07-29 17:48:46,956 p=2787 u=ansible n=ansible | ok: [centos2]
+2023-07-29 17:48:46,959 p=2787 u=ansible n=ansible | TASK [install_nexus : Check nexus download file was existed] ***************************************************************************************
+2023-07-29 17:48:47,494 p=2787 u=ansible n=ansible | ok: [centos2]
+2023-07-29 17:48:47,497 p=2787 u=ansible n=ansible | TASK [install_nexus : Download nexus file] *********************************************************************************************************
+2023-07-29 17:48:47,504 p=2787 u=ansible n=ansible | skipping: [centos2]
+2023-07-29 17:48:47,507 p=2787 u=ansible n=ansible | TASK [install_nexus : Check the nexus file was extracted and renamed] ******************************************************************************
+2023-07-29 17:48:47,744 p=2787 u=ansible n=ansible | ok: [centos2]
+2023-07-29 17:48:47,747 p=2787 u=ansible n=ansible | TASK [install_nexus : Extract the nexus file] ******************************************************************************************************
+2023-07-29 17:48:47,754 p=2787 u=ansible n=ansible | skipping: [centos2]
+2023-07-29 17:48:47,757 p=2787 u=ansible n=ansible | TASK [install_nexus : Find the directories name after extract] *************************************************************************************
+2023-07-29 17:48:47,764 p=2787 u=ansible n=ansible | skipping: [centos2]
+2023-07-29 17:48:47,767 p=2787 u=ansible n=ansible | TASK [install_nexus : Get the list of directory names] *********************************************************************************************
+2023-07-29 17:48:47,776 p=2787 u=ansible n=ansible | skipping: [centos2]
+2023-07-29 17:48:47,779 p=2787 u=ansible n=ansible | TASK [install_nexus : Rename nexus file] ***********************************************************************************************************
+2023-07-29 17:48:47,786 p=2787 u=ansible n=ansible | skipping: [centos2]
+2023-07-29 17:48:47,789 p=2787 u=ansible n=ansible | TASK [install_nexus : Add user nexus] **************************************************************************************************************
+2023-07-29 17:48:48,132 p=2787 u=ansible n=ansible | [WARNING]: The input password appears not to have been hashed. The 'password' argument must be encrypted for this module to work properly.
+
+2023-07-29 17:48:48,132 p=2787 u=ansible n=ansible | ok: [centos2]
+2023-07-29 17:48:48,135 p=2787 u=ansible n=ansible | TASK [install_nexus : Change ownership of nexus directory] *****************************************************************************************
+2023-07-29 17:48:48,666 p=2787 u=ansible n=ansible | ok: [centos2]
+2023-07-29 17:48:48,669 p=2787 u=ansible n=ansible | TASK [install_nexus : Change ownership of sonatype-work directory] *********************************************************************************
+2023-07-29 17:48:49,334 p=2787 u=ansible n=ansible | ok: [centos2]
+2023-07-29 17:48:49,337 p=2787 u=ansible n=ansible | TASK [install_nexus : Uncomment and set run_as_user parameter] *************************************************************************************
+2023-07-29 17:48:49,628 p=2787 u=ansible n=ansible | ok: [centos2]
+2023-07-29 17:48:49,631 p=2787 u=ansible n=ansible | TASK [install_nexus : Copy Nexus systemd unit file] ************************************************************************************************
+2023-07-29 17:48:50,034 p=2787 u=ansible n=ansible | ok: [centos2]
+2023-07-29 17:48:50,037 p=2787 u=ansible n=ansible | TASK [install_nexus : Run systemctl daemon-reload to save any changes or configurations] ***********************************************************
+2023-07-29 17:48:50,501 p=2787 u=ansible n=ansible | changed: [centos2]
+2023-07-29 17:48:50,503 p=2787 u=ansible n=ansible | TASK [install_nexus : Enable Nexus service at boot] ************************************************************************************************
+2023-07-29 17:48:50,944 p=2787 u=ansible n=ansible | ok: [centos2]
+2023-07-29 17:48:50,947 p=2787 u=ansible n=ansible | TASK [install_nexus : Start Nexus service] *********************************************************************************************************
+2023-07-29 17:48:51,258 p=2787 u=ansible n=ansible | ok: [centos2]
+2023-07-29 17:48:51,260 p=2787 u=ansible n=ansible | TASK [install_nexus : debug] ***********************************************************************************************************************
+2023-07-29 17:48:51,269 p=2787 u=ansible n=ansible | ok: [centos2] => {
+    "nexus_service_status.status.ActiveState": "active"
+}
+2023-07-29 17:48:51,272 p=2787 u=ansible n=ansible | TASK [install_nexus : Main task install Jenkins on Debian] *****************************************************************************************
+2023-07-29 17:48:51,282 p=2787 u=ansible n=ansible | skipping: [centos2]
+2023-07-29 17:48:51,293 p=2787 u=ansible n=ansible | included: /home/ansible/labs/roles/install_nexus/tasks/distro/ubuntu.yml for ubuntu2
+2023-07-29 17:48:51,299 p=2787 u=ansible n=ansible | TASK [install_nexus : Update apt] ******************************************************************************************************************
+2023-07-29 17:48:52,006 p=2787 u=ansible n=ansible | ok: [ubuntu2]
+2023-07-29 17:48:52,011 p=2787 u=ansible n=ansible | TASK [install_nexus : Install Java] ****************************************************************************************************************
+2023-07-29 17:49:10,779 p=2787 u=ansible n=ansible | changed: [ubuntu2]
+2023-07-29 17:49:10,786 p=2787 u=ansible n=ansible | TASK [install_nexus : Create folder before download] ***********************************************************************************************
+2023-07-29 17:49:10,984 p=2787 u=ansible n=ansible | changed: [ubuntu2]
+2023-07-29 17:49:10,989 p=2787 u=ansible n=ansible | TASK [install_nexus : Check nexus download file was existed] ***************************************************************************************
+2023-07-29 17:49:11,145 p=2787 u=ansible n=ansible | ok: [ubuntu2]
+2023-07-29 17:49:11,151 p=2787 u=ansible n=ansible | TASK [install_nexus : Download nexus file] *********************************************************************************************************
+2023-07-29 17:49:38,362 p=2787 u=ansible n=ansible | changed: [ubuntu2]
+2023-07-29 17:49:38,368 p=2787 u=ansible n=ansible | TASK [install_nexus : Check the nexus file was extracted and renamed] ******************************************************************************
+2023-07-29 17:49:38,521 p=2787 u=ansible n=ansible | ok: [ubuntu2]
+2023-07-29 17:49:38,527 p=2787 u=ansible n=ansible | TASK [install_nexus : Extract the nexus file] ******************************************************************************************************
+2023-07-29 17:49:43,268 p=2787 u=ansible n=ansible | changed: [ubuntu2]
+2023-07-29 17:49:43,274 p=2787 u=ansible n=ansible | TASK [install_nexus : Find the directories name after extract] *************************************************************************************
+2023-07-29 17:49:43,504 p=2787 u=ansible n=ansible | ok: [ubuntu2]
+2023-07-29 17:49:43,509 p=2787 u=ansible n=ansible | TASK [install_nexus : Get the list of directory names] *********************************************************************************************
+2023-07-29 17:49:43,550 p=2787 u=ansible n=ansible | ok: [ubuntu2]
+2023-07-29 17:49:43,557 p=2787 u=ansible n=ansible | TASK [install_nexus : Rename nexus file] ***********************************************************************************************************
+2023-07-29 17:49:43,717 p=2787 u=ansible n=ansible | changed: [ubuntu2]
+2023-07-29 17:49:43,723 p=2787 u=ansible n=ansible | TASK [install_nexus : Add user nexus] **************************************************************************************************************
+2023-07-29 17:49:43,942 p=2787 u=ansible n=ansible | changed: [ubuntu2]
+2023-07-29 17:49:43,948 p=2787 u=ansible n=ansible | TASK [install_nexus : Add line no password to sudoers file] ****************************************************************************************
+2023-07-29 17:49:44,117 p=2787 u=ansible n=ansible | changed: [ubuntu2]
+2023-07-29 17:49:44,123 p=2787 u=ansible n=ansible | TASK [install_nexus : Change ownership of nexus directory] *****************************************************************************************
+2023-07-29 17:49:44,325 p=2787 u=ansible n=ansible | changed: [ubuntu2]
+2023-07-29 17:49:44,330 p=2787 u=ansible n=ansible | TASK [install_nexus : Change ownership of sonatype-work directory] *********************************************************************************
+2023-07-29 17:49:44,492 p=2787 u=ansible n=ansible | changed: [ubuntu2]
+2023-07-29 17:49:44,498 p=2787 u=ansible n=ansible | TASK [install_nexus : Uncomment and set run_as_user parameter] *************************************************************************************
+2023-07-29 17:49:44,657 p=2787 u=ansible n=ansible | changed: [ubuntu2]
+2023-07-29 17:49:44,662 p=2787 u=ansible n=ansible | TASK [install_nexus : Copy Nexus systemd unit file] ************************************************************************************************
+2023-07-29 17:49:45,031 p=2787 u=ansible n=ansible | changed: [ubuntu2]
+2023-07-29 17:49:45,037 p=2787 u=ansible n=ansible | TASK [install_nexus : Run systemctl daemon-reload to save any changes or configurations] ***********************************************************
+2023-07-29 17:49:45,364 p=2787 u=ansible n=ansible | changed: [ubuntu2]
+2023-07-29 17:49:45,369 p=2787 u=ansible n=ansible | TASK [install_nexus : Enable Nexus service at boot] ************************************************************************************************
+2023-07-29 17:49:45,801 p=2787 u=ansible n=ansible | changed: [ubuntu2]
+2023-07-29 17:49:45,806 p=2787 u=ansible n=ansible | TASK [install_nexus : Start Nexus service] *********************************************************************************************************
+2023-07-29 17:49:46,236 p=2787 u=ansible n=ansible | changed: [ubuntu2]
+2023-07-29 17:49:46,242 p=2787 u=ansible n=ansible | TASK [install_nexus : debug] ***********************************************************************************************************************
+2023-07-29 17:49:46,252 p=2787 u=ansible n=ansible | ok: [ubuntu2] => {
+    "nexus_service_status.status.ActiveState": "inactive"
+}
+2023-07-29 17:49:46,292 p=2787 u=ansible n=ansible | RUNNING HANDLER [Reload Nexus systemd service] *****************************************************************************************************
+2023-07-29 17:49:48,082 p=2787 u=ansible n=ansible | changed: [ubuntu2]
+2023-07-29 17:49:48,091 p=2787 u=ansible n=ansible | PLAY RECAP *****************************************************************************************************************************************
+2023-07-29 17:49:48,092 p=2787 u=ansible n=ansible | centos2                    : ok=16   changed=1    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0   
+2023-07-29 17:49:48,092 p=2787 u=ansible n=ansible | ubuntu2                    : ok=23   changed=15   unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
