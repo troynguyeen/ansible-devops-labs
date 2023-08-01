@@ -1,2 +1,2 @@
-# ansible-fpt-labs
+# ansible-devops-labs
 Set up roles of GitLab, Jenkins, Docker, Nexus, Sonarqube with Ansible
