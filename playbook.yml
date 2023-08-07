@@ -1,40 +1,60 @@
-- name: Jenkins playbook
-  hosts: jenkins_install_group
-  become: yes
-  roles:
-    - install_jenkins
+# - name: Jenkins playbook
+#   hosts: jenkins_install_group
+#   become: yes
+#   roles:
+#     - install_jenkins
 
-- name: Docker playbook
-  hosts: docker_install_group
-  become: yes
-  roles:
-    - install_docker
+# - name: Docker playbook
+#   hosts: docker_install_group
+#   become: yes
+#   roles:
+#     - install_docker
 
-- name: GitLab playbook
-  hosts: gitlab_install_group
-  become: yes
-  roles:
-    - install_gitlab
+# - name: GitLab playbook
+#   hosts: gitlab_install_group
+#   become: yes
+#   roles:
+#     - install_gitlab
 
-- name: Nexus playbook
-  hosts: nexus_install_group
-  vars_files:
-    - roles/install_nexus/vars/sensitive.yml
-  become: yes
-  roles:
-    - install_nexus
-  handlers:
-    - import_tasks: roles/install_nexus/handlers/handlers_service.yml
+# - name: Nexus playbook
+#   hosts: nexus_install_group
+#   vars_files:
+#     - roles/install_nexus/vars/sensitive.yml
+#   become: yes
+#   roles:
+#     - install_nexus
+#   handlers:
+#     - import_tasks: roles/install_nexus/handlers/handlers_service.yml
 
-- name: SonarQube playbook
-  hosts: sonarqube_install_group
+# - name: SonarQube playbook
+#   hosts: sonarqube_install_group
+#   vars:
+#     ansible_python_interpreter: /usr/bin/python3
+#   vars_files:
+#     - roles/install_sonarqube/vars/sensitive.yml
+#   become: yes
+#   roles:
+#     - install_sonarqube
+#   handlers:
+#     - import_tasks: roles/install_sonarqube/handlers/handlers_service.yml
+
+- name: Read Secret from Azure Key Vault
+  hosts: azure_host
   vars:
-    ansible_python_interpreter: /usr/bin/python3
+    az_cert: azure-keyvault/certificates/ansible-certification.pem
   vars_files:
-    - roles/install_sonarqube/vars/sensitive.yml
-  become: yes
-  roles:
-    - install_sonarqube
-  handlers:
-    - import_tasks: roles/install_sonarqube/handlers/handlers_service.yml
+    - azure-keyvault/azure-config.yml
+  tasks:
+  - name: Az login with service principal
+    command: 'az login --service-principal -u {{ application_id }} -t {{ tenant_id }} -p {{ az_cert }}'
+
+  - name: Show a secret in azure key vault
+    command: 'az keyvault secret show --name db-password --vault-name ansible-vault-s68 --query "value"'
+    register: secret
+
+  - name: Print Secret Value
+    debug:
+      msg: "Secret: {{ secret.stdout_lines.0 | replace('\"','') }}"
+
+
 

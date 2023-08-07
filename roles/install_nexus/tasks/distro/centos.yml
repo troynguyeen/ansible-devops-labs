@@ -3,6 +3,10 @@
     name: '*'
     state: latest
 
+- name: Update APT cache
+  yum:
+    update_cache: yes
+
 - name: Install Java
   yum:
     name: java-1.8.0-openjdk

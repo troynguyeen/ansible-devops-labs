@@ -3,16 +3,20 @@
     name: '*'
     state: latest
 
+- name: Update APT cache
+  apt:
+    update_cache: yes
+
 - name: Install Java
   apt:
     name: openjdk-8-jre-headless
     state: present
 
-- name: Set default JDK to OpenJDK 8
-  community.general.alternatives:
-    name: java
-    path: /usr/lib/jvm/java-8-openjdk-arm64/bin/java
-    link: /usr/bin/java
+# - name: Set default JDK to OpenJDK 8
+#   community.general.alternatives:
+#     name: java
+#     path: /usr/lib/jvm/java-8-openjdk-arm64/bin/java
+#     link: /usr/bin/java
 
 - name: Create folder before download
   file:

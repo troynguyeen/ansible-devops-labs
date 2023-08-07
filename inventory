@@ -2,11 +2,14 @@
 centos1 ansible_host=192.168.64.12 ansible_user=root ansible_ssh_pass=123456
 centos2 ansible_host=192.168.64.13 ansible_user=root ansible_ssh_pass=123456
 centos3 ansible_host=192.168.64.26 ansible_user=root ansible_ssh_pass=123456
+centos_controller ansible_host=127.0.0.1 ansible_user=root ansible_ssh_pass=123456
 
 #Ubuntu
 ubuntu1 ansible_host=192.168.64.14 ansible_user=root ansible_ssh_pass=123456
 ubuntu2 ansible_host=192.168.64.16 ansible_user=root ansible_ssh_pass=123456
 ubuntu3 ansible_host=192.168.64.27 ansible_user=root ansible_ssh_pass=123456
+ubuntu-nexus ansible_host=139-162-43-236.ip.linodeusercontent.com ansible_user=root ansible_ssh_pass=Troy0522905064
+ubuntu-sonar ansible_host=139-162-46-224.ip.linodeusercontent.com ansible_user=root ansible_ssh_pass=Troy0522905064
 
 [docker_install_group]
 centos1
@@ -17,13 +20,18 @@ centos1
 ubuntu1
 
 [nexus_install_group]
-centos2
-ubuntu2
+; centos2
+; ubuntu2
+ubuntu-nexus
 
 [sonarqube_install_group]
-centos2
-ubuntu2
+; centos2
+; ubuntu2
+ubuntu-sonar
 
 [gitlab_install_group]
 centos3
 ubuntu3
+
+[azure_host]
+centos_controller

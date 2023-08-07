@@ -3,6 +3,10 @@
     name: '*'
     state: latest
 
+- name: Update APT cache
+  yum:
+    update_cache: yes
+
 - name: Install OpenJDK 11
   yum:
     name: java-11-openjdk
@@ -31,7 +35,6 @@
       - postgresql-server
     state: present
     
-
 - name: Check PostgreSQL initdb was runned
   stat:
     path: /var/lib/pgsql/data/PG_VERSION
