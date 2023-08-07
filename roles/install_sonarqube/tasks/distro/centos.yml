@@ -12,11 +12,11 @@
     name: java-11-openjdk
     state: present
 
-- name: Set default JDK to OpenJDK 11
-  community.general.alternatives:
-    name: java
-    path: /usr/lib/jvm/jre-11-openjdk/bin/java
-    link: /usr/bin/java
+# - name: Set default JDK to OpenJDK 11
+#   community.general.alternatives:
+#     name: java
+#     path: /usr/lib/jvm/jre-11-openjdk/bin/java
+#     link: /usr/bin/java
 
 # - name: Import GPG key for PostgreSQL repository
 #   rpm_key:
@@ -82,7 +82,7 @@
 - name: Add user postgres
   user:
     name: 'postgres'
-    password: 'postgres'
+    password: '{{ sonarpostgresqlpassword }}'
 
 - name: Create sonarqube_db database
   community.postgresql.postgresql_db:
@@ -94,7 +94,7 @@
 - name: Create sonarqube DB user with encrypted password
   community.postgresql.postgresql_user:
     name: sonarqube
-    password: '{{ sonarqube_password_db }}'
+    password: '{{ sonardbpassword }}'
     encrypted: yes
   become: yes
   become_user: postgres
@@ -128,6 +128,11 @@
   stat:
     path: /opt/sonarqube_dir/sonarqube
   register: sonarqube_file
+
+- name: Install unzip
+  yum:
+    name: unzip
+    state: present
 
 - name: Extract the SonarQube file
   unarchive:
@@ -164,12 +169,12 @@
   lineinfile:
     path: /opt/sonarqube_dir/sonarqube/conf/sonar.properties
     regexp: '^#sonar.jdbc.password='
-    line: 'sonar.jdbc.password={{ sonarqube_password_db }}'
+    line: 'sonar.jdbc.password={{ sonardbpassword }}'
 
 - name: Add user sonarqube
   user:
     name: 'sonarqube'
-    password: '{{ sonar_user_password }}'
+    password: '{{ sonaruserpassword }}'
 
 - name: Change ownership of SonarQube directory
   file:

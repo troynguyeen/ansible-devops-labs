@@ -39,6 +39,11 @@
     path: '/opt/nexus_dir/nexus'
   register: nexus_file
 
+- name: Install tar
+  yum:
+    name: tar
+    state: present
+
 - name: Extract the nexus file
   unarchive:
     src: /opt/nexus_dir/nexus.tar.gz
@@ -67,7 +72,7 @@
 - name: Add user nexus
   user:
     name: '{{ _username }}'
-    password: '{{ nexus_user_password }}'
+    password: '{{ nexususerpassword }}'
 
 - name: Change ownership of nexus directory
   file:

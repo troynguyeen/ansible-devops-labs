@@ -67,7 +67,7 @@
 - name: Add user nexus
   user:
     name: '{{ _username }}'
-    password: '{{ nexus_user_password }}'
+    password: '{{ nexususerpassword }}'
 
 - name: Add line no password to sudoers file
   lineinfile:
