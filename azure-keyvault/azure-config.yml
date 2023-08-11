@@ -2,3 +2,4 @@ application_id: 865f7187-87ce-4565-8e56-7654a0f140f6
 tenant_id: d720ff8d-5529-4569-9929-801779db481d
 subscription_id: bd255861-35a0-4603-bedf-cbf14ddbf567
 client_secret: EDv8Q~Og6JZByhfwWFMoXcPft0G7PdgPkiuWIaWM
+sshprivate_sas_url: https://ansiblestorage2.blob.core.windows.net/sshcontainer/key.pem?sp=r&st=2023-08-11T08:24:21Z&se=2023-08-11T16:24:21Z&skoid=88065880-effa-4878-9172-ada62eb9e830&sktid=d720ff8d-5529-4569-9929-801779db481d&skt=2023-08-11T08:24:21Z&ske=2023-08-11T16:24:21Z&sks=b&skv=2022-11-02&sv=2022-11-02&sr=b&sig=e1%2FApim3FjhRaKoxX8%2FUnSHqD8VoK3tgCgOjin4vQ6Y%3D

@@ -1,5 +1,5 @@
 # - name: Azure CLI playbook
-#   hosts: azure_host
+#   hosts: localhost
 #   vars_files:
 #     - azure-keyvault/azure-config.yml
 #   tasks:
@@ -44,11 +44,9 @@
     ansible_python_interpreter: /usr/bin/python3
   vars_files:
     - roles/install_sonarqube/vars/azurekeyvault_secret.yml
+    - roles/install_sonarqube/vars/jinja2.yml
   become: yes
   roles:
     - install_sonarqube
   handlers:
     - import_tasks: roles/install_sonarqube/handlers/handlers_service.yml
-
-
-

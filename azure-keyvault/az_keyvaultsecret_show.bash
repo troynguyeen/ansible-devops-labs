@@ -6,7 +6,7 @@
 # sh /path/az_keyvaultsecret_show.bash <ROLE NAME> <SECRET NAME>
 
 # Example: 
-# sh ./azure-keyvault/az_keyvaultsecret_show.bash sonar sonar-user-password
+# sh ./azure-keyvault/az_keyvaultsecret_show.bash sonar sonaruserpassword
 
 #parameters
 ROLE=$1

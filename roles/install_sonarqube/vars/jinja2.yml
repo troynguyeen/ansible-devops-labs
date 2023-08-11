@@ -1,0 +1,26 @@
+#Unit
+description: SonarQube service
+after: syslog.target network.target
+
+#Service
+type: forking
+exec_start: /opt/sonarqube_dir/sonarqube/bin/linux-x86-64/sonar.sh start
+exec_stop: /opt/sonarqube_dir/sonarqube/bin/linux-x86-64/sonar.sh stop
+user: sonarqube
+group: sonarqube
+restart: always
+
+#production
+nofile_prod: 65536
+nproc_prod: 4096
+
+#qa
+nofile_qa: 30000
+nproc_qa: 2000
+
+#dev
+nofile_dev: 15000
+nproc_dev: 1000
+
+#Install
+wanted_by: multi-user.target

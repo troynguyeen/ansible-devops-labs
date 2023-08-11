@@ -1,14 +1,23 @@
 [Unit]
-Description=SonarQube service
-After=syslog.target network.target
+Description={{ description }}
+After={{ after }}
 [Service]
-Type=forking
-ExecStart=/opt/sonarqube_dir/sonarqube/bin/linux-x86-64/sonar.sh start
-ExecStop=/opt/sonarqube_dir/sonarqube/bin/linux-x86-64/sonar.sh stop
-User=sonarqube
-Group=sonarqube
-Restart=always
-LimitNOFILE=65536
-LimitNPROC=4096
+Type={{ type }}
+ExecStart={{ exec_start }}
+ExecStop={{ exec_stop }}
+User={{ user }}
+Group={{ group }}
+Restart={{ restart }}
+{% if inventory_hostname == 'ubuntu_sonarqube_prod' %}
+LimitNOFILE={{ nofile_prod }}
+LimitNPROC={{ nproc_prod }}
+{% elif inventory_hostname == 'ubuntu_sonarqube_qa' %}
+LimitNOFILE={{ nofile_qa }}
+LimitNPROC={{ nproc_qa }}
+{% else %}
+LimitNOFILE={{ nofile_dev }}
+LimitNPROC={{ nproc_dev }}
+{% endif %}
+
 [Install]
-WantedBy=multi-user.target
+WantedBy={{ wanted_by }}
