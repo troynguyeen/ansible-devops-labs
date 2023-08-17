@@ -1,2 +1,15 @@
 # ansible-devops-labs
-Set up roles of GitLab, Jenkins, Docker, Nexus, Sonarqube with Ansible
+
+Integrate **Azure Key Vault** for **Ansible** using *bash script*
+
+## Ansible roles
+
+- GitLab
+- Jenkins
+- Docker
+- Nexus
+- Sonarqube
+- Nginx
+- Springapp
+
+![Ansible integrate with Azure](azure_serviceprincipal_application2.jpg)
