@@ -38,15 +38,31 @@
 #   handlers:
 #     - import_tasks: roles/install_nexus/handlers/handlers_service.yml
 
-- name: SonarQube playbook
-  hosts: sonarqube_install_group
-  vars:
-    ansible_python_interpreter: /usr/bin/python3
-  vars_files:
-    - roles/install_sonarqube/vars/azurekeyvault_secret.yml
-    - roles/install_sonarqube/vars/jinja2.yml
-  become: yes
-  roles:
-    - install_sonarqube
-  handlers:
-    - import_tasks: roles/install_sonarqube/handlers/handlers_service.yml
+# - name: SonarQube playbook
+#   hosts: sonarqube_install_group
+#   vars:
+#     ansible_python_interpreter: /usr/bin/python3
+#   vars_files:
+#     - roles/install_sonarqube/vars/azurekeyvault_secret.yml
+#     - roles/install_sonarqube/vars/jinja2.yml
+#   become: yes
+#   roles:
+#     - install_sonarqube
+#   handlers:
+#     - import_tasks: roles/install_sonarqube/handlers/handlers_service.yml
+
+# - name: Nginx playbook
+#   hosts: nginx_install_group
+#   become: yes
+#   roles:
+#     - install_nginx
+#   handlers:
+#     - import_tasks: roles/install_nginx/handlers/handlers_service.yml
+
+# - name: Spring app playbook
+#   hosts: springapp_install_group
+#   become: yes
+#   roles:
+#     - install_springapp
+#   handlers:
+#     - import_tasks: roles/install_springapp/handlers/handlers_service.yml

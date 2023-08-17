@@ -1,0 +1,3 @@
+app_domain_name: 'springapp'
+nginx_server: '172-104-56-189.ip.linodeusercontent.com'
+app_server: 'http://170-187-231-170.ip.linodeusercontent.com:8080'

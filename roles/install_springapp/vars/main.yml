@@ -1,0 +1,4 @@
+artifact_url: 'http://139-162-43-236.ip.linodeusercontent.com:8081/service/rest/v1/search/assets/download?sort=version&repository=maven_repository&maven.groupId=org.springframework.samples&maven.artifactId=spring-petclinic&maven.baseVersion=3.1.0-SNAPSHOT_20&maven.extension=jar'
+username_nexus: 'admin'
+password_nexus: '123456'
+exec_start: '/usr/bin/java -jar /usr/local/bin/springapp.jar'
