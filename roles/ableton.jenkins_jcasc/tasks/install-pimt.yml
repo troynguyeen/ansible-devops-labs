@@ -1,0 +1,20 @@
+---
+# By creating a separate fact, users can call this specific task file to install PIMT and
+# use this variable to access the tool directly.
+- name: Set fact for PIMT installation path
+  ansible.builtin.set_fact:
+    jenkins_pimt_path: "{{ jenkins_lib_dir }}/{{ jenkins_pimt_jar }}"
+
+- name: Ensure that Jenkins Plugin Installation Manager Tool is installed
+  become: true
+  ansible.builtin.get_url:
+    url: "{{ jenkins_pimt_url }}"
+    dest: "{{ jenkins_pimt_path }}"
+    owner: "{{ jenkins_user }}"
+    group: "{{ jenkins_group }}"
+    mode: "0644"
+    timeout: "{{ jenkins_download_timeout }}"
+  register: pimt_download_result
+  retries: "{{ jenkins_download_retries }}"
+  delay: "{{ jenkins_download_delay }}"
+  until: pimt_download_result is succeeded

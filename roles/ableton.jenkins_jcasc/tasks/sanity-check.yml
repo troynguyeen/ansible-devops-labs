@@ -1,0 +1,94 @@
+---
+- name: Ensure that required role variables are defined
+  ansible.builtin.fail:
+    msg: "Undefined required role variable (s)"
+  when: required_variable == ""
+  loop_control:
+    loop_var: required_variable
+  loop:
+    - "{{ jenkins_group }}"
+    - "{{ jenkins_home }}"
+    - "{{ jenkins_jcasc_version }}"
+    - "{{ jenkins_pimt_version }}"
+    - "{{ jenkins_plugins_file }}"
+    - "{{ jenkins_port }}"
+    - "{{ jenkins_prefix }}"
+    - "{{ jenkins_root }}"
+    - "{{ jenkins_user }}"
+    - "{{ jenkins_version }}"
+
+- name: Assert that both JCasC configuration file variables aren't conflicting
+  ansible.builtin.fail:
+    msg: "jenkins_jcasc_config_file and jenkins_jcasc_config_files are mutually exclusive"
+  when:
+    - jenkins_jcasc_config_file != ""
+    - jenkins_jcasc_config_files | length > 0
+
+- name: Set jenkins_jcasc_config_files if necessary
+  ansible.builtin.set_fact:
+    jenkins_jcasc_config_files:
+      - "{{ jenkins_jcasc_config_file }}"
+  when: jenkins_jcasc_config_file != ""
+
+- name: Ensure that configuration files are defined
+  ansible.builtin.assert:
+    that: jenkins_jcasc_config_files | length > 0
+    quiet: true
+
+- name: Ensure that configuration files have unique names
+  block:
+    - name: Initialize jenkins_jcasc_config_filenames fact
+      ansible.builtin.set_fact:
+        jenkins_jcasc_config_filenames: []
+
+    - name: Assemble list of configuration filenames
+      ansible.builtin.set_fact:
+        jenkins_jcasc_config_filenames: "{{ jenkins_jcasc_config_filenames + \
+            [filename | basename | regex_replace('\\.j2$', '')] }}"
+      loop: "{{ jenkins_jcasc_config_files }}"
+      loop_control:
+        loop_var: filename
+
+    - name: Assert that configuration filenames are unique
+      ansible.builtin.assert:
+        that: >
+          jenkins_jcasc_config_filenames | unique | length ==
+          jenkins_jcasc_config_files | length
+
+- name: Ensure that startup timeout is valid
+  ansible.builtin.assert:
+    that: jenkins_startup_timeout_sec > 0
+    quiet: true
+
+- name: Ensure that jobs directory is defined if necessary
+  ansible.builtin.fail:
+    msg: "jenkins_jobs is not empty, but jenkins_jobs_dir is undefined"
+  when: (jenkins_jobs | length > 0) and jenkins_jobs_dir == ""
+
+- name: Ensure prefix starts with slash
+  ansible.builtin.fail:
+    msg: "jenkins_prefix needs to start with slash (/)"
+  when: not jenkins_prefix.startswith("/")
+
+- name: Read plugins.yaml file
+  ansible.builtin.set_fact:
+    jenkins_plugins_file_data: >-
+      {{ lookup('ansible.builtin.file', jenkins_plugins_file) | from_yaml }}
+
+- name: Check if configuration-as-code plugin is defined in plugins.yaml data
+  ansible.builtin.set_fact:
+    jenkins_jcasc_plugin_found: true
+  when: item.artifactId == "configuration-as-code"
+  loop: "{{ jenkins_plugins_file_data.plugins }}"
+
+- name: Fail if configuration-as-code plugin was not found in plugins.yaml
+  ansible.builtin.fail:
+    msg: "The configuration-as-code (JCasC) plugin was not found in plugins.yaml"
+  when: jenkins_jcasc_plugin_found is not defined
+
+- name: Fail if user requested both delayed service start and Jenkins user configurations
+  ansible.builtin.fail:
+    msg: "jenkins_start_service is false but jenkins_users was specified"
+  when:
+    - not jenkins_start_service
+    - jenkins_users | length > 0

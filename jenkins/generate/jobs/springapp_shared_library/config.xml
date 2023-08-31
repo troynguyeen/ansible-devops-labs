@@ -1,0 +1,74 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject plugin="workflow-multibranch@756.v891d88f2cd46">
+<actions/>
+<description></description>
+<displayName>springapp_shared_library</displayName>
+<properties/>
+<folderViews class="jenkins.branch.MultiBranchProjectViewHolder" plugin="branch-api@2.1122.v09cb_8ea_8a_724">
+<owner class="org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject" reference="../.."/>
+</folderViews>
+<healthMetrics/>
+<icon class="jenkins.branch.MetadataActionFolderIcon" plugin="branch-api@2.1122.v09cb_8ea_8a_724">
+<owner class="org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject" reference="../.."/>
+</icon>
+<orphanedItemStrategy class="com.cloudbees.hudson.plugins.folder.computed.DefaultOrphanedItemStrategy" plugin="cloudbees-folder@6.815.v0dd5a_cb_40e0e">
+<pruneDeadBranches>true</pruneDeadBranches>
+<daysToKeep>-1</daysToKeep>
+<numToKeep>-1</numToKeep>
+<abortBuilds>false</abortBuilds>
+</orphanedItemStrategy>
+<triggers>
+<com.igalg.jenkins.plugins.mswt.trigger.ComputedFolderWebHookTrigger plugin="multibranch-scan-webhook-trigger@1.0.9">
+<spec></spec>
+<token>mytoken</token>
+</com.igalg.jenkins.plugins.mswt.trigger.ComputedFolderWebHookTrigger>
+</triggers>
+<disabled>false</disabled>
+<sources class="jenkins.branch.MultiBranchProject$BranchSourceList" plugin="branch-api@2.1122.v09cb_8ea_8a_724">
+<data>
+<jenkins.branch.BranchSource>
+<source class="io.jenkins.plugins.gitlabbranchsource.GitLabSCMSource" plugin="gitlab-branch-source@664.v877fdc293c89">
+<id>d45f4060-d223-42eb-9195-4fac1eafbef3</id>
+<serverName>default</serverName>
+<projectOwner>classic.nct</projectOwner>
+<projectPath>classic.nct/jenkins-spring-app</projectPath>
+<credentialsId>sshkey</credentialsId>
+<traits>
+<io.jenkins.plugins.gitlabbranchsource.BranchDiscoveryTrait>
+<strategyId>3</strategyId>
+</io.jenkins.plugins.gitlabbranchsource.BranchDiscoveryTrait>
+<io.jenkins.plugins.gitlabbranchsource.OriginMergeRequestDiscoveryTrait>
+<strategyId>2</strategyId>
+</io.jenkins.plugins.gitlabbranchsource.OriginMergeRequestDiscoveryTrait>
+<io.jenkins.plugins.gitlabbranchsource.ForkMergeRequestDiscoveryTrait>
+<strategyId>2</strategyId>
+<trust class="io.jenkins.plugins.gitlabbranchsource.ForkMergeRequestDiscoveryTrait$TrustPermission"/>
+<buildMRForksNotMirror>false</buildMRForksNotMirror>
+</io.jenkins.plugins.gitlabbranchsource.ForkMergeRequestDiscoveryTrait>
+<io.jenkins.plugins.gitlabbranchsource.WebhookListenerBuildConditionsTrait>
+<alwaysBuildMROpen>true</alwaysBuildMROpen>
+<alwaysBuildMRReOpen>true</alwaysBuildMRReOpen>
+<alwaysIgnoreMRApproval>false</alwaysIgnoreMRApproval>
+<alwaysIgnoreMRUnApproval>false</alwaysIgnoreMRUnApproval>
+<alwaysIgnoreMRApproved>false</alwaysIgnoreMRApproved>
+<alwaysIgnoreMRUnApproved>false</alwaysIgnoreMRUnApproved>
+<alwaysIgnoreNonCodeRelatedUpdates>false</alwaysIgnoreNonCodeRelatedUpdates>
+<alwaysIgnoreMRWorkInProgress>false</alwaysIgnoreMRWorkInProgress>
+</io.jenkins.plugins.gitlabbranchsource.WebhookListenerBuildConditionsTrait>
+</traits>
+<sshRemote>git@gitlab.com:classic.nct/jenkins-spring-app.git</sshRemote>
+<httpRemote>https://gitlab.com/classic.nct/jenkins-spring-app.git</httpRemote>
+<projectId>48322026</projectId>
+</source>
+<strategy class="jenkins.branch.DefaultBranchPropertyStrategy">
+<properties class="empty-list"/>
+</strategy>
+</jenkins.branch.BranchSource>
+</data>
+<owner class="org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject" reference="../.."/>
+</sources>
+<factory class="org.jenkinsci.plugins.workflow.multibranch.WorkflowBranchProjectFactory">
+<owner class="org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject" reference="../.."/>
+<scriptPath>Jenkinsfile-shared-library</scriptPath>
+</factory>
+</org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject>

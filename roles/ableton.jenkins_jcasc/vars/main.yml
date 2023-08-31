@@ -1,0 +1,61 @@
+---
+# Directory for temporary Jenkins data
+jenkins_caches_dir: "{{ jenkins_root }}/caches"
+
+# Directory for Jenkins configuration files
+jenkins_config_dir: "{{ jenkins_root }}/config"
+
+# Command used by service wrappers to launch Jenkins
+jenkins_command: "{{ jenkins_java_exe }} {{ jenkins_java_args }} \
+  -Djenkins.install.runSetupWizard=false -jar {{ jenkins_war }} \
+  --webroot={{ jenkins_caches_dir }}/war --httpPort={{ jenkins_port }} \
+  --prefix={{ jenkins_prefix | quote }} \
+  {{ jenkins_extra_args }}"
+
+# Delay (in seconds) to wait between retries when downloading Jenkins and related assets
+jenkins_download_delay: 5
+
+# Number of retries to attempt when downloading Jenkins and related assets
+jenkins_download_retries: 3
+
+# Timeout (in seconds) to use when downloading Jenkins and related assets
+jenkins_download_timeout: 30
+
+# Value to use for `JENKINS_HOME`. This will also be used as the home directory of the
+# Jenkins user.
+jenkins_home: "{{ jenkins_root }}/home"
+
+# Directory for associated Jenkins libraries
+jenkins_lib_dir: "{{ jenkins_root }}/lib"
+
+# PID (process identifier) file used for Jenkins service
+jenkins_pid_file: "{{ jenkins_caches_dir }}/jenkins.pid"
+
+jenkins_pimt_jar: "jenkins-plugin-manager-{{ jenkins_pimt_version }}.jar"
+
+# For internal use only, do not override. Set jenkins_pimt_logfile instead.
+jenkins_pimt_log_output_to_file: false
+
+# URL to download PIMT from
+jenkins_pimt_url: "https://github.com/jenkinsci/plugin-installation-manager-tool/releases\
+  /download/{{ jenkins_pimt_version }}/{{ jenkins_pimt_jar }}"
+
+# Version of the Jenkins Plugin Installation Manager Tool to use.
+# WARNING: Changing the version of this tool may cause failures in install-plugins.yml if
+# API of this tool has changed.
+jenkins_pimt_version: "2.12.13"
+
+# Directory for Jenkins plugins
+jenkins_plugins_dir: "{{ jenkins_home }}/plugins"
+
+# Directory for secret files (credentials, etc)
+jenkins_secrets_dir: "{{ jenkins_root }}/secrets"
+
+# Name to give tokens added by this role (see jenkins_users in defaults/main.yml)
+jenkins_token_name: "Added by Ansible"
+
+# Directory for Jenkins static web content
+jenkins_user_content_dir: "{{ jenkins_home }}/userContent"
+
+# Destination Jenkins WAR file
+jenkins_war: "{{ jenkins_lib_dir }}/jenkins-{{ jenkins_version }}.war"

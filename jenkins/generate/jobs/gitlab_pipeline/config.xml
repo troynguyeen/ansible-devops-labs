@@ -1,0 +1,79 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1316.vd2290d3341a_f">
+<actions>
+<org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2144.v077a_d1928a_40"/>
+<org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2144.v077a_d1928a_40">
+<jobProperties/>
+<triggers/>
+<parameters/>
+<options/>
+</org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+</actions>
+<description></description>
+<keepDependencies>false</keepDependencies>
+<properties>
+<com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.7.15">
+<gitLabConnection>GitLab connection</gitLabConnection>
+<jobCredentialId>gitlab_token</jobCredentialId>
+<useAlternativeCredential>false</useAlternativeCredential>
+</com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
+<org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+<triggers/>
+</org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+</properties>
+<definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@3731.ve4b_5b_857b_a_d3">
+<script>pipeline {
+agent any
+environment {
+NEXUS_URL = &quot;139-162-43-236.ip.linodeusercontent.com:8081&quot;
+NEXUS_REPOSITORY = &quot;maven_repository&quot;
+}
+stages {
+stage(&apos;Push artifact&apos;) {
+steps {
+script {
+pom = readMavenPom file: &quot;pom.xml&quot;;
+echo &quot;Push artifact: ${pom.version}_${env.BUILD_NUMBER}&quot;
+filesByGlob = findFiles(glob: &quot;target/*.${pom.packaging}&quot;);
+echo &quot;filesByGlob: $filesByGlob&quot;;
+file = filesByGlob[0].path;
+//jarFilePath = sh(script: &quot;find target -name &apos;*.jar&apos;&quot;, returnStdout: true);
+withCredentials([usernameColonPassword(credentialsId: &apos;nexus_id&apos;, variable: &apos;NEXUS_CREDENTIAL&apos;)]) {
+sh &quot;&quot;&quot;
+curl -v -u \$NEXUS_CREDENTIAL &quot;http://$NEXUS_URL/service/rest/v1/components?repository=$NEXUS_REPOSITORY&quot; \
+-F &quot;maven2.groupId=$pom.groupId&quot; \
+-F &quot;maven2.artifactId=$pom.artifactId&quot; \
+-F &quot;maven2.version=${pom.version}_${env.BUILD_NUMBER}&quot; \
+-F &quot;maven2.asset1=@${filesByGlob[0].path}&quot; \
+-F &quot;maven2.asset1.extension=jar&quot;
+&quot;&quot;&quot;
+}
+}
+}
+}
+stage(&apos;Pull artifact&apos;) {
+steps {
+script {
+pom = readMavenPom file: &quot;pom.xml&quot;;
+echo &quot;Pull artifact: ${pom.version}_${env.BUILD_NUMBER}&quot;
+filesByGlob = findFiles(glob: &quot;target/*.${pom.packaging}&quot;);
+ARTIFACT_FILE = filesByGlob[0].name;
+ARTIFACT_URL = &quot;$NEXUS_URL/service/rest/v1/search/assets/download?sort=version&amp;repository=$NEXUS_REPOSITORY&amp;maven.groupId=$pom.groupId&amp;maven.artifactId=$pom.artifactId&amp;maven.baseVersion=${pom.version}_${env.BUILD_NUMBER}&amp;maven.extension=$pom.packaging&quot;;
+sh &quot;curl -fsSL -o springapp.jar \&quot;http://$ARTIFACT_URL\&quot;&quot;
+sh &quot;ls | grep jar&quot;
+}
+}
+}
+}
+post {
+always {
+echo &quot;&quot;
+}
+}
+}
+</script>
+<sandbox>true</sandbox>
+</definition>
+<triggers/>
+<disabled>false</disabled>
+</flow-definition>

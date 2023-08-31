@@ -1,0 +1,107 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1316.vd2290d3341a_f">
+<actions>
+<org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2144.v077a_d1928a_40"/>
+<org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2144.v077a_d1928a_40">
+<jobProperties/>
+<triggers/>
+<parameters/>
+<options/>
+</org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+</actions>
+<description></description>
+<keepDependencies>false</keepDependencies>
+<properties>
+<com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.37.2">
+<projectUrl>https://github.com/troynguyeen/jenkins-springapp/</projectUrl>
+<displayName></displayName>
+</com.coravy.hudson.plugins.github.GithubProjectProperty>
+<org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+<triggers>
+<org.jenkinsci.plugins.ghprb.GhprbTrigger plugin="ghprb@1.42.2">
+<spec>H/5 generate jenkins-cli.jar jenkins.yaml.j2 jenkins_url jobs-script.bash plugins-script.bash token generate jenkins-cli.jar jenkins.yaml.j2 jenkins_url jobs-script.bash plugins-script.bash token generate jenkins-cli.jar jenkins.yaml.j2 jenkins_url jobs-script.bash plugins-script.bash token *</spec>
+<configVersion>3</configVersion>
+<adminlist></adminlist>
+<allowMembersOfWhitelistedOrgsAsAdmin>false</allowMembersOfWhitelistedOrgsAsAdmin>
+<orgslist></orgslist>
+<cron>H/5 generate jenkins-cli.jar jenkins.yaml.j2 jenkins_url jobs-script.bash plugins-script.bash token generate jenkins-cli.jar jenkins.yaml.j2 jenkins_url jobs-script.bash plugins-script.bash token generate jenkins-cli.jar jenkins.yaml.j2 jenkins_url jobs-script.bash plugins-script.bash token *</cron>
+<buildDescTemplate></buildDescTemplate>
+<onlyTriggerPhrase>false</onlyTriggerPhrase>
+<useGitHubHooks>true</useGitHubHooks>
+<permitAll>true</permitAll>
+<whitelist></whitelist>
+<autoCloseFailedPullRequests>false</autoCloseFailedPullRequests>
+<displayBuildErrorsOnDownstreamBuilds>false</displayBuildErrorsOnDownstreamBuilds>
+<whiteListTargetBranches>
+<org.jenkinsci.plugins.ghprb.GhprbBranch>
+<branch></branch>
+</org.jenkinsci.plugins.ghprb.GhprbBranch>
+</whiteListTargetBranches>
+<blackListTargetBranches>
+<org.jenkinsci.plugins.ghprb.GhprbBranch>
+<branch></branch>
+</org.jenkinsci.plugins.ghprb.GhprbBranch>
+</blackListTargetBranches>
+<gitHubAuthId>36bba977-1d08-4e55-991d-897da4b0020f</gitHubAuthId>
+<triggerPhrase></triggerPhrase>
+<skipBuildPhrase>.*\[skip\W+ci\].*</skipBuildPhrase>
+<blackListCommitAuthor></blackListCommitAuthor>
+<blackListLabels></blackListLabels>
+<whiteListLabels></whiteListLabels>
+<includedRegions></includedRegions>
+<excludedRegions></excludedRegions>
+<extensions>
+<org.jenkinsci.plugins.ghprb.extensions.status.GhprbSimpleStatus>
+<commitStatusContext>Jenkins CI/CD builder</commitStatusContext>
+<triggeredStatus></triggeredStatus>
+<startedStatus></startedStatus>
+<statusUrl></statusUrl>
+<addTestResults>false</addTestResults>
+<completedStatus>
+<org.jenkinsci.plugins.ghprb.extensions.comments.GhprbBuildResultMessage>
+<message>Jenkins CI/CD build SUSSCESS</message>
+<result>SUCCESS</result>
+</org.jenkinsci.plugins.ghprb.extensions.comments.GhprbBuildResultMessage>
+<org.jenkinsci.plugins.ghprb.extensions.comments.GhprbBuildResultMessage>
+<message>Jenkins CI/CD build ERROR</message>
+<result>ERROR</result>
+</org.jenkinsci.plugins.ghprb.extensions.comments.GhprbBuildResultMessage>
+<org.jenkinsci.plugins.ghprb.extensions.comments.GhprbBuildResultMessage>
+<message>Jenkins CI/CD build FAILURE</message>
+<result>FAILURE</result>
+</org.jenkinsci.plugins.ghprb.extensions.comments.GhprbBuildResultMessage>
+</completedStatus>
+</org.jenkinsci.plugins.ghprb.extensions.status.GhprbSimpleStatus>
+</extensions>
+</org.jenkinsci.plugins.ghprb.GhprbTrigger>
+<com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.37.2">
+<spec></spec>
+</com.cloudbees.jenkins.GitHubPushTrigger>
+</triggers>
+</org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+</properties>
+<definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@3731.ve4b_5b_857b_a_d3">
+<scm class="hudson.plugins.git.GitSCM" plugin="git@5.2.0">
+<configVersion>2</configVersion>
+<userRemoteConfigs>
+<hudson.plugins.git.UserRemoteConfig>
+<refspec>+refs/pull/*:refs/remotes/origin/pr/*</refspec>
+<url>https://github.com/troynguyeen/jenkins-springapp/</url>
+<credentialsId>github-access-token</credentialsId>
+</hudson.plugins.git.UserRemoteConfig>
+</userRemoteConfigs>
+<branches>
+<hudson.plugins.git.BranchSpec>
+<name>${sha1}</name>
+</hudson.plugins.git.BranchSpec>
+</branches>
+<doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+<submoduleCfg class="empty-list"/>
+<extensions/>
+</scm>
+<scriptPath>Jenkinsfile</scriptPath>
+<lightweight>false</lightweight>
+</definition>
+<triggers/>
+<disabled>false</disabled>
+</flow-definition>

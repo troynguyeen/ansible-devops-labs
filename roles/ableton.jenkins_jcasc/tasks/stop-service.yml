@@ -1,0 +1,68 @@
+---
+- name: Gather service facts
+  ansible.builtin.service_facts:
+
+- name: Initialize jenkins_service_running fact
+  ansible.builtin.set_fact:
+    jenkins_service_running: false
+
+- name: Set jenkins_service_running for systemd hosts
+  ansible.builtin.set_fact:
+    jenkins_service_running: true
+  when:
+    - "ansible_service_mgr == 'systemd'"
+    - "'jenkins.service' in ansible_facts.services"
+    - "ansible_facts.services['jenkins.service']['state'] != 'stopped'"
+
+- name: Set jenkins_service_running for SysV init hosts
+  ansible.builtin.set_fact:
+    jenkins_service_running: true
+  when:
+    - "ansible_service_mgr == 'sysvinit'"
+    - "'jenkins' in ansible_facts.services"
+    - "ansible_facts.services['jenkins']['state'] != 'stopped'"
+
+- name: Stop Jenkins service
+  when: jenkins_service_running
+  block:
+    - name: Slurp Jenkins service PID
+      ansible.builtin.slurp:
+        path: "{{ jenkins_pid_file }}"
+      register: jenkins_pid
+
+    - name: Ensure Jenkins service is stopped
+      become: true
+      ansible.builtin.service:
+        name: "jenkins"
+        state: stopped
+        # This normally isn't required, but we also test this role in Docker containers
+        # that resemble standalone hosts with SSH. Since OpenSSH has libsystemd as a
+        # dependency, it will fool the service module into selecting systemd as the
+        # service backend.
+        use: "{{ ansible_service_mgr }}"
+      # This is required or else molecule's idempotency test will fail. See:
+      # https://github.com/ansible-community/molecule/issues/2765
+      changed_when: false
+      when: not ansible_check_mode
+
+    # Just to be safe, wait until Jenkins finally stops. Stopping services can be
+    # asynchronous and so the process itself may continue to run for a bit to ensure a
+    # clean shut-down. If subsequent tasks must do something with files in the Jenkins
+    # home folder, this may cause problems.
+    - name: Wait for Jenkins service to stop
+      ansible.builtin.command: "ps -p {{ jenkins_pid['content'] | b64decode }}"
+      register: jenkins_service_running
+      ignore_errors: true
+      until: jenkins_service_running is failed
+      retries: 60
+      delay: 1
+      # This is required or else molecule's idempotency test will fail. See:
+      # https://github.com/ansible-community/molecule/issues/2765
+      changed_when: false
+      when: not ansible_check_mode
+
+    # Again, a paranoid measure aimed at preventing potential errors when immediately
+    # accessing files in the Jenkins home folder.
+    - name: Sync filesystems
+      ansible.builtin.command: "sync"
+      changed_when: false

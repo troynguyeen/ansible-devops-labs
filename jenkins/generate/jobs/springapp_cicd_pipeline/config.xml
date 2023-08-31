@@ -1,0 +1,108 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1316.vd2290d3341a_f">
+<actions>
+<org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2144.v077a_d1928a_40"/>
+<org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2144.v077a_d1928a_40">
+<jobProperties/>
+<triggers/>
+<parameters/>
+<options/>
+</org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+</actions>
+<description></description>
+<keepDependencies>false</keepDependencies>
+<properties>
+<com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.7.15">
+<gitLabConnection>GitLab connection</gitLabConnection>
+<jobCredentialId>gitlab_token</jobCredentialId>
+<useAlternativeCredential>true</useAlternativeCredential>
+</com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
+<jenkins.plugins.office365connector.WebhookJobProperty plugin="Office-365-Connector@4.20.0">
+<webhooks>
+<jenkins.plugins.office365connector.Webhook>
+<name>Jenkins Notification - MS Team</name>
+<url>https://fptsoftware362.webhook.office.com/webhookb2/4c942833-9eb5-4e2d-b488-423c5d85f2f4@f01e930a-b52e-42b1-b70f-a8882b5d043b/JenkinsCI/b69c758d8a33434f99421ce205bfe5ab/2402f6d5-457e-4fb9-90b5-89b85b622857</url>
+<startNotification>false</startNotification>
+<notifySuccess>true</notifySuccess>
+<notifyAborted>false</notifyAborted>
+<notifyNotBuilt>false</notifyNotBuilt>
+<notifyUnstable>false</notifyUnstable>
+<notifyFailure>true</notifyFailure>
+<notifyBackToNormal>false</notifyBackToNormal>
+<notifyRepeatedFailure>false</notifyRepeatedFailure>
+<timeout>30000</timeout>
+<macros class="empty-list"/>
+<factDefinitions class="empty-list"/>
+</jenkins.plugins.office365connector.Webhook>
+<jenkins.plugins.office365connector.Webhook>
+<name>Jenkins Notification - Outlook</name>
+<url>https://fptsoftware362.webhook.office.com/webhookb2/871ceeb8-22bd-40eb-a55d-4d6b455b4b46@f01e930a-b52e-42b1-b70f-a8882b5d043b/JenkinsCI/19d67d4d7dd345059965ed6823da4799/2402f6d5-457e-4fb9-90b5-89b85b622857</url>
+<startNotification>false</startNotification>
+<notifySuccess>true</notifySuccess>
+<notifyAborted>false</notifyAborted>
+<notifyNotBuilt>false</notifyNotBuilt>
+<notifyUnstable>false</notifyUnstable>
+<notifyFailure>true</notifyFailure>
+<notifyBackToNormal>false</notifyBackToNormal>
+<notifyRepeatedFailure>false</notifyRepeatedFailure>
+<timeout>30000</timeout>
+<macros class="empty-list"/>
+<factDefinitions class="empty-list"/>
+</jenkins.plugins.office365connector.Webhook>
+</webhooks>
+</jenkins.plugins.office365connector.WebhookJobProperty>
+<org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+<triggers>
+<com.dabsquared.gitlabjenkins.GitLabPushTrigger plugin="gitlab-plugin@1.7.15">
+<spec></spec>
+<triggerOnPush>true</triggerOnPush>
+<triggerToBranchDeleteRequest>false</triggerToBranchDeleteRequest>
+<triggerOnMergeRequest>true</triggerOnMergeRequest>
+<triggerOnlyIfNewCommitsPushed>false</triggerOnlyIfNewCommitsPushed>
+<triggerOnPipelineEvent>false</triggerOnPipelineEvent>
+<triggerOnAcceptedMergeRequest>false</triggerOnAcceptedMergeRequest>
+<triggerOnClosedMergeRequest>false</triggerOnClosedMergeRequest>
+<triggerOnApprovedMergeRequest>true</triggerOnApprovedMergeRequest>
+<triggerOpenMergeRequestOnPush>never</triggerOpenMergeRequestOnPush>
+<triggerOnNoteRequest>true</triggerOnNoteRequest>
+<noteRegex>Jenkins please retry a build</noteRegex>
+<ciSkip>true</ciSkip>
+<skipWorkInProgressMergeRequest>true</skipWorkInProgressMergeRequest>
+<labelsThatForcesBuildIfAdded></labelsThatForcesBuildIfAdded>
+<setBuildDescription>true</setBuildDescription>
+<branchFilterType>RegexBasedFilter</branchFilterType>
+<includeBranchesSpec></includeBranchesSpec>
+<excludeBranchesSpec></excludeBranchesSpec>
+<sourceBranchRegex></sourceBranchRegex>
+<targetBranchRegex>main</targetBranchRegex>
+<secretToken>{AQAAABAAAAAQFXSyIdqsyVRDPxdpkA85tjp+9v+Npver09VHvnlnE2I=}</secretToken>
+<pendingBuildName></pendingBuildName>
+<cancelPendingBuildsOnUpdate>false</cancelPendingBuildsOnUpdate>
+</com.dabsquared.gitlabjenkins.GitLabPushTrigger>
+</triggers>
+</org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+</properties>
+<definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@3731.ve4b_5b_857b_a_d3">
+<scm class="hudson.plugins.git.GitSCM" plugin="git@5.2.0">
+<configVersion>2</configVersion>
+<userRemoteConfigs>
+<hudson.plugins.git.UserRemoteConfig>
+<url>https://gitlab.com/classic.nct/jenkins-spring-app</url>
+<credentialsId>gitlab_login</credentialsId>
+</hudson.plugins.git.UserRemoteConfig>
+</userRemoteConfigs>
+<branches>
+<hudson.plugins.git.BranchSpec>
+<name>main</name>
+</hudson.plugins.git.BranchSpec>
+</branches>
+<doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+<submoduleCfg class="empty-list"/>
+<extensions/>
+</scm>
+<scriptPath>Jenkinsfile</scriptPath>
+<lightweight>false</lightweight>
+</definition>
+<triggers/>
+<disabled>false</disabled>
+</flow-definition>

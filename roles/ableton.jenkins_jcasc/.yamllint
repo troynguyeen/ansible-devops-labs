@@ -1,0 +1,11 @@
+---
+ignore: |
+  .ansible
+  .direnv
+  .venv
+
+extends: default
+
+rules:
+  line-length:
+    max: 90

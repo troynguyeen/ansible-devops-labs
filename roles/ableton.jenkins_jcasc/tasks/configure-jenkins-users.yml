@@ -1,0 +1,61 @@
+---
+- name: Ensure Jenkins users exist
+  community.general.jenkins_script:
+    script: |
+      def userName = '{{ item.key }}'
+      def userPassword = '{{ item.value.password | default("") }}'
+
+      try {
+        def securityRealm = jenkins.model.Jenkins.instance.securityRealm
+        if (securityRealm instanceof hudson.security.HudsonPrivateSecurityRealm) {
+          securityRealm.createAccount(userName, userPassword)
+        } else if (securityRealm.class.simpleName == 'ActiveDirectorySecurityRealm') {
+          // Looking up the user will add a local configuration file for them
+          securityRealm.loadUserByUsername(userName)
+        } else {
+          println 'Unable to add user to security realm of type ' +
+            securityRealm.class.simpleName
+        }
+      } catch (error) {
+        println 'Script failed!'
+        println error
+      }
+    url: "{{ jenkins_host }}:{{ jenkins_port }}{{ jenkins_prefix }}"
+    user: "{{ jenkins_web_user }}"
+    password: "{{ jenkins_web_password }}"
+  register: jenkins_script_result
+  changed_when: false
+  failed_when: "'Script failed!' in jenkins_script_result.output"
+  loop: "{{ jenkins_users | dict2items }}"
+
+- name: Set API tokens for Jenkins users
+  community.general.jenkins_script:
+    script: |
+      import hudson.model.*
+      import jenkins.model.*
+      import jenkins.security.*
+      import jenkins.security.apitoken.*
+
+      try {
+        def userName = '{{ item.key }}'
+        def tokenName = '{{ jenkins_token_name }}'
+        def tokenValue = '{{ item.value.api_token }}'
+        def user = User.get(userName, false)
+        def apiTokenProperty = user.getProperty(ApiTokenProperty.class)
+        apiTokenProperty.tokenStore.addFixedNewToken(tokenName, tokenValue)
+
+        user.save()
+      } catch (error) {
+        println 'Script failed!'
+        println error
+      }
+    url: "{{ jenkins_host }}:{{ jenkins_port }}{{ jenkins_prefix }}"
+    user: "{{ jenkins_web_user }}"
+    password: "{{ jenkins_web_password }}"
+  register: jenkins_script_result
+  changed_when: false
+  failed_when: "'Script failed!' in jenkins_script_result.output"
+  when:
+    - item.value.api_token is defined
+    - item.value.api_token != ""
+  loop: "{{ jenkins_users | dict2items }}"

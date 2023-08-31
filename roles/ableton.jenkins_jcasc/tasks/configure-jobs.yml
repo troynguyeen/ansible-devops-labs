@@ -1,0 +1,24 @@
+---
+- name: Job directories are present
+  become: true
+  ansible.builtin.file:
+    path: "{{ jenkins_home }}/jobs/{{ job_name }}"
+    owner: "{{ jenkins_user }}"
+    group: "{{ jenkins_group }}"
+    mode: "0777"
+    state: directory
+  loop: "{{ jenkins_jobs }}"
+  loop_control:
+    loop_var: job_name
+
+- name: Jobs are present
+  become: true
+  ansible.builtin.copy:
+    src: "{{ jenkins_jobs_dir }}/{{ job_name }}/config.xml"
+    dest: "{{ jenkins_home }}/jobs/{{ job_name }}/config.xml"
+    owner: "{{ jenkins_user }}"
+    group: "{{ jenkins_group }}"
+    mode: "0777"
+  loop: "{{ jenkins_jobs }}"
+  loop_control:
+    loop_var: job_name

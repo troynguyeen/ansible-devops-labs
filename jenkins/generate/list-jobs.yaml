@@ -1,0 +1,11 @@
+jenkins_jobs:
+  - DSL_job
+  - DSL_multibranch_springapp
+  - gitlab_pipeline
+  - multibranch_pipeline
+  - spring-petclinic-cicd-pipeline
+  - springapp_cicd_pipeline
+  - springapp_multibranch_pipeline
+  - springapp_multibranchpipeline_ansible
+  - springapp_shared_library
+  - test_pipeline

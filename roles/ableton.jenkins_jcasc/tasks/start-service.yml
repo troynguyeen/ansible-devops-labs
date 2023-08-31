@@ -1,0 +1,40 @@
+---
+- name: Start Jenkins service
+  become: true
+  ansible.builtin.service:
+    name: "jenkins"
+    state: started
+    # This normally isn't required, but we also test this role in Docker containers that
+    # resemble standalone hosts with SSH. Since OpenSSH has libsystemd as a dependency,
+    # it will fool the service module into selecting systemd as the service backend.
+    use: "{{ ansible_service_mgr }}"
+  # This is required or else molecule's idempotency test will fail. See:
+  # https://github.com/ansible-community/molecule/issues/2765
+  changed_when: false
+  when: not ansible_check_mode
+
+- name: Initialize jenkins_web_force_basic_auth parameter
+  ansible.builtin.set_fact:
+    jenkins_web_force_basic_auth: false
+
+- name: Set jenkins_web_force_basic_auth parameter
+  ansible.builtin.set_fact:
+    jenkins_web_force_basic_auth: true
+  when: jenkins_web_user != "" and jenkins_web_password != ""
+
+- name: Wait for Jenkins to start
+  ansible.builtin.uri:
+    url: "{{ jenkins_host }}:{{ jenkins_port }}{{ jenkins_prefix }}"
+    url_username: "{{ jenkins_web_user | default(omit) }}"
+    url_password: "{{ jenkins_web_password | default(omit) }}"
+    force_basic_auth: "{{ jenkins_web_force_basic_auth }}"
+  become: false
+  register: jenkins_home_content
+  # Jenkins will return 503 (service unavailable) on the home page while
+  # starting (the "Please wait while Jenkins is getting ready to work" page)
+  until:
+    - jenkins_home_content is succeeded
+    - jenkins_home_content.status == 200
+  retries: "{{ (jenkins_startup_timeout_sec / 5) | int }}"
+  delay: 5
+  when: not ansible_check_mode

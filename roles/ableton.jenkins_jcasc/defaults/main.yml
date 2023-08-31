@@ -1,0 +1,178 @@
+---
+# List of custom files to install on Jenkins. Usually this is necessary for configuration
+# files which do not yet support JCasC. Each list item should be a dict with keys for
+# `src` and `dest`, which correspond to the location of the file on the Ansible controller
+# and the destination relative to `JENKINS_HOME` where the file should be installed,
+# respectively. For example:
+#
+# jenkins_custom_files:
+#   - src: {{ playbook_dir }}/files/jenkins/example.xml
+#     dest: example.xml
+#
+# Any intermediate directories for the destination file will be created if necessary. If
+# you need to install files on Jenkins for static web hosting, please refer to the
+# jenkins_user_content variable below, which can copy an entire userContent directory to
+# Jenkins and is more efficient than iterating over this list.
+jenkins_custom_files: []
+
+# List of custom plugins to copy and install on Jenkins during provisioning. For example:
+#
+# jenkins_custom_plugins:
+#   - "{{ playbook_dir }}/files/jenkins/plugins/customplugin.hpi"
+#
+# Any custom plugins will be installed after and take precedence over the plugins
+# specified in jenkins_plugins_file.
+jenkins_custom_plugins: []
+
+# Extra arguments to use when starting the Jenkins service.
+jenkins_extra_args: ""
+
+# Group to run the Jenkins service as. This group will be created if it does not exist.
+# NOTE: This variable must be defined!
+jenkins_group: "jenkins"
+
+# If true, then install Java in this role from the system package manager. If you want to
+# provide your own Java, then set this to false.
+jenkins_install_java: true
+
+# Java arguments to use when starting the Jenkins service.
+# NOTE: The `-Djenkins.install.runSetupWizard=false` argument is always passed when
+# starting Jenkins, it is not necessary to add this option to `jenkins_java_args`.
+jenkins_java_args: ""
+
+# Path to Java executable.
+jenkins_java_exe: "/usr/bin/java"
+
+# Java package to install. You may override this value in order to provide a package pin,
+# for example.
+jenkins_java_package: "openjdk-11-jre-headless"
+
+# Location of a single JCasC configuration file. For multiple files, use
+# jenkins_jcasc_config_files instead. Please see the README or JCasC homepage for
+# information about how to generate this file.
+# NOTE: This variable (or jenkins_jcasc_config_files) must be defined!
+jenkins_jcasc_config_file: ""
+
+# List of JCasC configuration files. Each of these files will be copied to a special
+# directory outside of JENKINS_HOME, so all files must have distinct filenames. According
+# to JCasC rules, the files also may not define conflicting configuration directives. Each
+# file may be a template, in which case the `*.j2` extension will be removed after
+# copying. Please see the README or JCasC homepage for information about how to generate
+# this file.
+# NOTE: This variable (or jenkins_jcasc_config_file) must be defined!
+jenkins_jcasc_config_files: []
+
+# Version of the JCasC plugin to use. Your `jenkins.yaml` file must be compatible with
+# this version of the JCasC plugin.
+# NOTE: This variable must be defined!
+jenkins_jcasc_version: "1.47"
+
+# List of Jenkins jobs to copy to the server. Each item in this list must contain a
+# relative path under the `jenkins_jobs_dir` directory which contains the job's
+# `config.xml` file.
+jenkins_jobs: []
+
+# Location on the Ansible controller machine where jobs listed in the `jenkins_jobs`
+# variable can be found.
+# NOTE: This variable must be defined if you want to use `jenkins_jobs`!
+jenkins_jobs_dir: ""
+
+# Extra arguments to pass to the Jenkins Plugin Installation Manager Tool (PIMT). For
+# supported options, see:
+# https://github.com/jenkinsci/plugin-installation-manager-tool#cli-options
+jenkins_pimt_args: ""
+
+# When defined, log output from the Jenkins Plugin Installation Manager Tool (PIMT) to
+# this file on the Ansible control machine instead of in Ansible's output. The file will
+# be owned by whatever user runs this role as. So in other words, if the role is called
+# with `become: true`, the file will be owned by root. Since PIMT can generate a lot of
+# output, this can improve the readability of deployment logs.
+jenkins_pimt_logfile: ""
+
+# File containing the list of plugins to install. Please refer to the README or to the
+# Jenkins Plugin Installation Manager Tool homepage for information about this file
+# format. The `plugins.yaml` file may also be used if it contains a `plugins` section. If
+# no plugins are to be installed, then you should assign this variable the same value as
+# `jenkins_jcasc_config_file`.
+# NOTE: This variable must be defined!
+jenkins_plugins_file: ""
+
+# HTTP port which Jenkins will listen on.
+# NOTE: This variable must be defined!
+jenkins_port: "8080"
+
+# Jenkins URL prefix, which will be added to all Jenkins URLs (for example,
+# http://localhost:8080/prefix/resource). If not given, the default value of "/" is used.
+# NOTE: This variable must be defined, and must start with "/"!
+jenkins_prefix: "/"
+
+# Root directory to install Jenkins content underneath. See vars/main.yml to customize
+# specific locations for various Jenkins directories.
+# NOTE: This variable must be defined!
+jenkins_root: "/opt/jenkins"
+
+# List of files to copy to the secrets directory. These files will only be readable by the
+# Jenkins user.
+jenkins_secret_files: []
+
+# If true, show the diff output when copying the plugins.yaml file to the controller. This
+# can be useful to see which plugins changed during a deployment.
+jenkins_show_plugins_yaml_changes: true
+
+# When false, don't start the service at the end of this role. This can be useful if when
+# extra work must be done on the host before Jenkins starts up and is ready to accept
+# jobs. To start Jenkins, manually call this role's `start-service.yml` tasks file:
+#
+# - name: Start Jenkins service
+#   ansible.builtin.include_role:
+#     name: "ableton.jenkins_jcasc"
+#     tasks_from: "start-service.yml"
+jenkins_start_service: true
+
+# How long to wait for Jenkins to start before failing. Use a higher value if your Jenkins
+# instance has a lot of jobs and builds.
+jenkins_startup_timeout_sec: 120
+
+# User to run the Jenkins service as. This user will be created if it does not exist.
+# NOTE: This variable must be defined!
+jenkins_user: "jenkins"
+
+# Directory containing static web content to be served by Jenkins.
+jenkins_user_content: ""
+
+# A dictionary containing Jenkins users to create, and optionally, passwords or API tokens
+# for them. The dictionary's keys are the user names, and may contain a key/value pairs
+# for the password and api_token. For example:
+#
+# jenkins_users:
+#   alice:
+#     password: "notsecure"
+#   bob:
+#     api_token: "112a1dfb4ac8209130c4b630efe824f589"
+#   carol:
+#     password: "changeme"
+#     api_token: "11c8f304eb91ab249386a2d929f28804e5"
+#
+# IMPORTANT: Note that omitting a password will create a user without a password! This may
+# be necessary for Jenkins installations which use Active Directory for their security
+# realm, but dangerous for those which rely on the internal Jenkins user database. You've
+# been warned!
+#
+# Also note that configuring Jenkins users is done with the Jenkins Groovy script API.
+# This will use jenkins_web_user and jenkins_web_password for authentication, which means
+# that this user must also have permission to create users.
+jenkins_users: {}
+
+# Version of Jenkins to install.
+# NOTE: This variable must be defined!
+jenkins_version: "2.346.3"
+
+# If the Jenkins instance requires authentication, then this variable should contain a
+# username for an administrator. This is used to determine when Jenkins has finished
+# starting up and is ready for requests, as well as adding user accounts.
+jenkins_web_user: ""
+
+# If the Jenkins instance requires authentication, then this variable should contain a
+# password for an administrator. This is used to determine when Jenkins has finished
+# starting up and is ready for requests, as well as adding user accounts.
+jenkins_web_password: ""

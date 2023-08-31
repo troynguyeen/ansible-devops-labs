@@ -66,3 +66,19 @@
 #     - install_springapp
 #   handlers:
 #     - import_tasks: roles/install_springapp/handlers/handlers_service.yml
+
+- name: Provision Jenkins
+  hosts: jenkins_provisioning
+  vars:
+    jenkins_host: "http://139-162-57-40.ip.linodeusercontent.com"
+    jenkins_web_user: "admin"
+    jenkins_web_password: "123456"
+    jenkins_jcasc_config_file: "jenkins/jenkins.yaml.j2"
+    jenkins_plugins_file: "jenkins/generate/plugins.yaml"
+    jenkins_jobs: "{{ jenkins_jobs }}"
+    jenkins_jobs_dir: "jenkins/generate/jobs"
+    jenkins_version: 2.414.1
+  vars_files:
+    - "jenkins/generate/list-jobs.yaml"
+  roles:
+    - ableton.jenkins_jcasc
