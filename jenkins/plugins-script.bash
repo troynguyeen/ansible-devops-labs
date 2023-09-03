@@ -6,13 +6,13 @@ while getopts "t:u:" option; do
    u) URL=$OPTARG;; # Get URL argument with -u tag
    \?)
     # Handle invalid options
-    echo "script usage: $(basename \$0) [-a] [-u] [-a somevalue]" >&2
+    echo "script usage: $(basename \$0) [-t TOKEN] [-u URL]" >&2
     exit 1
    ;;
  esac
 done
 
-# Run the command and capture the output
+# Get list plugins
 PLUGINS=$(java -jar jenkins-cli.jar -auth $TOKEN -s $URL list-plugins)
 
 # Create an empty YAML file

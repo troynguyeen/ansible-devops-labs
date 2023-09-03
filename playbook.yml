@@ -78,6 +78,7 @@
     jenkins_jobs: "{{ jenkins_jobs }}"
     jenkins_jobs_dir: "jenkins/generate/jobs"
     jenkins_version: 2.414.1
+    jenkins_jcasc_version: "1670.v564dc8b_982d0"
   vars_files:
     - "jenkins/generate/list-jobs.yaml"
   roles:
